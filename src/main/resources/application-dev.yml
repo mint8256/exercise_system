@@ -1,0 +1,31 @@
+server:
+  port: 8787
+spring:
+  application:
+    name: exercise_system
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://101.34.215.131:3306/exercise_system?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai
+    username: struction
+    password: struction
+
+mybatis-plus:
+  type-aliases-package: com.five.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  global-config:
+    db-config:
+      id-type: auto
+    banner: false
+
+mybatis:
+  type-aliases-package: com.five.entity
+  mapper-locations: classpath:mapper/*.xml
+
+logging:
+  level:
+    com:
+      five:
+        mapper:
+          debug

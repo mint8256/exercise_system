@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.five.dao.PaperClazzDao">
+
+    <resultMap type="com.five.entity.PaperClazz" id="PaperClazzMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="clazzId" column="clazz_id" jdbcType="INTEGER"/>
+        <result property="paperId" column="paper_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into exercise_system.paper_clazz(clazz_id, paper_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.clazzId}, #{entity.paperId})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into exercise_system.paper_clazz(clazz_id, paper_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.clazzId}, #{entity.paperId})
+        </foreach>
+        on duplicate key update
+        clazz_id = values(clazz_id) , paper_id = values(paper_id)
+    </insert>
+
+</mapper>
+

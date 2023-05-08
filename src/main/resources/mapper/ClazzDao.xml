@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.five.dao.ClazzDao">
+
+    <resultMap type="com.five.entity.Clazz" id="ClazzMap">
+        <result property="clazzId" column="clazz_id" jdbcType="INTEGER"/>
+        <result property="clazzName" column="clazz_name" jdbcType="VARCHAR"/>
+        <result property="grade" column="grade" jdbcType="INTEGER"/>
+        <result property="classNumber" column="class_number" jdbcType="INTEGER"/>
+        <result property="schoolId" column="school_id" jdbcType="INTEGER"/>
+        <result property="signTime" column="sign_time" jdbcType="TIMESTAMP"/>
+        <result property="clazzIdentifier" column="clazz_identifier" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="clazzId" useGeneratedKeys="true">
+        insert into exercise_system.clazz(clazz_name, grade, class_number, school_id, sign_time, clazz_identifier)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.clazzName}, #{entity.grade}, #{entity.classNumber}, #{entity.schoolId}, #{entity.signTime},
+            #{entity.clazzIdentifier})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="clazzId" useGeneratedKeys="true">
+        insert into exercise_system.clazz(clazz_name, grade, class_number, school_id, sign_time, clazz_identifier)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.clazzName}, #{entity.grade}, #{entity.classNumber}, #{entity.schoolId}, #{entity.signTime},
+            #{entity.clazzIdentifier})
+        </foreach>
+        on duplicate key update
+        clazz_name = values(clazz_name) , grade = values(grade) , class_number = values(class_number) , school_id =
+        values(school_id) , sign_time = values(sign_time) , clazz_identifier = values(clazz_identifier)
+    </insert>
+
+</mapper>
+

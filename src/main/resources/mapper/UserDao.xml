@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.five.dao.UserDao">
+
+    <resultMap type="com.five.entity.User" id="UserMap">
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="realName" column="real_name" jdbcType="VARCHAR"/>
+        <result property="sex" column="sex" jdbcType="INTEGER"/>
+        <result property="role" column="role" jdbcType="INTEGER"/>
+        <result property="schoolId" column="school_id" jdbcType="INTEGER"/>
+        <result property="userIdentifier" column="user_identifier" jdbcType="VARCHAR"/>
+        <result property="signTime" column="sign_time" jdbcType="TIMESTAMP"/>
+        <result property="deleteTime" column="delete_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into exercise_system.user(username, password, real_name, sex, role, school_id, user_identifier,
+        sign_time, delete_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.username}, #{entity.password}, #{entity.realName}, #{entity.sex}, #{entity.role},
+            #{entity.schoolId}, #{entity.userIdentifier}, #{entity.signTime}, #{entity.deleteTime})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into exercise_system.user(username, password, real_name, sex, role, school_id, user_identifier,
+        sign_time, delete_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.username}, #{entity.password}, #{entity.realName}, #{entity.sex}, #{entity.role},
+            #{entity.schoolId}, #{entity.userIdentifier}, #{entity.signTime}, #{entity.deleteTime})
+        </foreach>
+        on duplicate key update
+        username = values(username) , password = values(password) , real_name = values(real_name) , sex = values(sex) ,
+        role = values(role) , school_id = values(school_id) , user_identifier = values(user_identifier) , sign_time =
+        values(sign_time) , delete_time = values(delete_time)
+    </insert>
+
+</mapper>
+
