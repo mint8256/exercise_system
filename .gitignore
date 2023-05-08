@@ -198,6 +198,9 @@ fabric.properties
 # *.iml
 # *.ipr
 
+mvnw.cmd
+mvnw
+
 # CMake
 cmake-build-*/
 
