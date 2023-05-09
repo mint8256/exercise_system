@@ -4,39 +4,41 @@
 
     <resultMap type="com.five.entity.QuestionList" id="QuestionListMap">
         <result property="questionListId" column="question_list_id" jdbcType="INTEGER"/>
-        <result property="questionNum" column="question_num" jdbcType="INTEGER"/>
+        <result property="questionCount" column="question_count" jdbcType="INTEGER"/>
         <result property="optMax" column="opt_max" jdbcType="INTEGER"/>
         <result property="resMax" column="res_max" jdbcType="INTEGER"/>
-        <result property="grade" column="grade" jdbcType="INTEGER"/>
+        <result property="grade" column="grade" jdbcType="VARCHAR"/>
         <result property="schoolId" column="school_id" jdbcType="INTEGER"/>
         <result property="questionListNumber" column="question_list_number" jdbcType="INTEGER"/>
         <result property="questionListIdentifier" column="question_list_identifier" jdbcType="VARCHAR"/>
         <result property="signTime" column="sign_time" jdbcType="TIMESTAMP"/>
+        <result property="score" column="score" jdbcType="INTEGER"/>
     </resultMap>
 
     <!-- 批量插入 -->
     <insert id="insertBatch" keyProperty="questionListId" useGeneratedKeys="true">
-        insert into exercise_system.question_list(question_num, opt_max, res_max, grade, school_id,
-        question_list_number, question_list_identifier, sign_time)
+        insert into exercise_system.question_list(question_count, opt_max, res_max, grade, school_id,
+        question_list_number, question_list_identifier, sign_time, score)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.questionNum}, #{entity.optMax}, #{entity.resMax}, #{entity.grade}, #{entity.schoolId},
-            #{entity.questionListNumber}, #{entity.questionListIdentifier}, #{entity.signTime})
+            (#{entity.questionCount}, #{entity.optMax}, #{entity.resMax}, #{entity.grade}, #{entity.schoolId},
+            #{entity.questionListNumber}, #{entity.questionListIdentifier}, #{entity.signTime}, #{entity.score})
         </foreach>
     </insert>
     <!-- 批量插入或按主键更新 -->
     <insert id="insertOrUpdateBatch" keyProperty="questionListId" useGeneratedKeys="true">
-        insert into exercise_system.question_list(question_num, opt_max, res_max, grade, school_id,
-        question_list_number, question_list_identifier, sign_time)
+        insert into exercise_system.question_list(question_count, opt_max, res_max, grade, school_id,
+        question_list_number, question_list_identifier, sign_time, score)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.questionNum}, #{entity.optMax}, #{entity.resMax}, #{entity.grade}, #{entity.schoolId},
-            #{entity.questionListNumber}, #{entity.questionListIdentifier}, #{entity.signTime})
+            (#{entity.questionCount}, #{entity.optMax}, #{entity.resMax}, #{entity.grade}, #{entity.schoolId},
+            #{entity.questionListNumber}, #{entity.questionListIdentifier}, #{entity.signTime}, #{entity.score})
         </foreach>
         on duplicate key update
-        question_num = values(question_num) , opt_max = values(opt_max) , res_max = values(res_max) , grade =
+        question_count = values(question_count) , opt_max = values(opt_max) , res_max = values(res_max) , grade =
         values(grade) , school_id = values(school_id) , question_list_number = values(question_list_number) ,
-        question_list_identifier = values(question_list_identifier) , sign_time = values(sign_time)
+        question_list_identifier = values(question_list_identifier) , sign_time = values(sign_time) , score =
+        values(score)
     </insert>
 
 </mapper>

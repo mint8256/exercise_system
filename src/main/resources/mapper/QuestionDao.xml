@@ -4,34 +4,38 @@
 
     <resultMap type="com.five.entity.Question" id="QuestionMap">
         <result property="questionId" column="question_id" jdbcType="INTEGER"/>
+        <result property="questionListId" column="question_list_id" jdbcType="INTEGER"/>
+        <result property="order" column="order" jdbcType="INTEGER"/>
         <result property="stem" column="stem" jdbcType="VARCHAR"/>
         <result property="questionBranch" column="question_branch" jdbcType="VARCHAR"/>
-        <result property="res" column="res" jdbcType="VARCHAR"/>
-        <result property="score" column="score" jdbcType="VARCHAR"/>
-        <result property="questionListId" column="question_list_id" jdbcType="INTEGER"/>
+        <result property="questionAnswer" column="question_answer" jdbcType="VARCHAR"/>
+        <result property="score" column="score" jdbcType="NUMERIC"/>
         <result property="questionDifficulty" column="question_difficulty" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!-- 批量插入 -->
     <insert id="insertBatch" keyProperty="questionId" useGeneratedKeys="true">
-        insert into exercise_system.question(stem, question_branch, res, score, question_list_id, question_difficulty)
+        insert into exercise_system.question(question_list_id, order, stem, question_branch, question_answer, score,
+        question_difficulty)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.stem}, #{entity.questionBranch}, #{entity.res}, #{entity.score}, #{entity.questionListId},
-            #{entity.questionDifficulty})
+            (#{entity.questionListId}, #{entity.order}, #{entity.stem}, #{entity.questionBranch},
+            #{entity.questionAnswer}, #{entity.score}, #{entity.questionDifficulty})
         </foreach>
     </insert>
     <!-- 批量插入或按主键更新 -->
     <insert id="insertOrUpdateBatch" keyProperty="questionId" useGeneratedKeys="true">
-        insert into exercise_system.question(stem, question_branch, res, score, question_list_id, question_difficulty)
+        insert into exercise_system.question(question_list_id, order, stem, question_branch, question_answer, score,
+        question_difficulty)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.stem}, #{entity.questionBranch}, #{entity.res}, #{entity.score}, #{entity.questionListId},
-            #{entity.questionDifficulty})
+            (#{entity.questionListId}, #{entity.order}, #{entity.stem}, #{entity.questionBranch},
+            #{entity.questionAnswer}, #{entity.score}, #{entity.questionDifficulty})
         </foreach>
         on duplicate key update
-        stem = values(stem) , question_branch = values(question_branch) , res = values(res) , score = values(score) ,
-        question_list_id = values(question_list_id) , question_difficulty = values(question_difficulty)
+        question_list_id = values(question_list_id) , order = values(order) , stem = values(stem) , question_branch =
+        values(question_branch) , question_answer = values(question_answer) , score = values(score) ,
+        question_difficulty = values(question_difficulty)
     </insert>
 
 </mapper>

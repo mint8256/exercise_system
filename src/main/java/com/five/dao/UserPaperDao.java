@@ -2,18 +2,16 @@ package com.five.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.five.entity.UserPaper;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 /**
- * (UserPaper)表数据库访问层
+ * 用户做的试卷记录(UserPaper)表数据库访问层
  *
  * @author fly
- * @since 2023-05-08 14:13:58
+ * @since 2023-05-09 15:46:16
  */
-@Mapper
 public interface UserPaperDao extends BaseMapper<UserPaper> {
 
     /**

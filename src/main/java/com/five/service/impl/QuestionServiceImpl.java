@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  * (Question)表服务实现类
  *
  * @author fly
- * @since 2023-05-08 14:13:57
+ * @since 2023-05-09 15:38:13
  */
 @Service("questionService")
 public class QuestionServiceImpl extends ServiceImpl<QuestionDao, Question> implements QuestionService {

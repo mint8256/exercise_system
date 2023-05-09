@@ -1,33 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.five.dao.UserClassDao">
+<mapper namespace="com.five.dao.UserClazzDao">
 
-    <resultMap type="com.five.entity.UserClass" id="UserClassMap">
+    <resultMap type="com.five.entity.UserClazz" id="UserClazzMap">
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="userId" column="user_id" jdbcType="INTEGER"/>
         <result property="clazzId" column="clazz_id" jdbcType="INTEGER"/>
         <result property="signTime" column="sign_time" jdbcType="TIMESTAMP"/>
-        <result property="deleteTime" column="delete_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <!-- 批量插入 -->
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into exercise_system.user_class(user_id, clazz_id, sign_time, delete_time)
+        insert into exercise_system.user_clazz(user_id, clazz_id, sign_time)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.userId}, #{entity.clazzId}, #{entity.signTime}, #{entity.deleteTime})
+            (#{entity.userId}, #{entity.clazzId}, #{entity.signTime})
         </foreach>
     </insert>
     <!-- 批量插入或按主键更新 -->
     <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into exercise_system.user_class(user_id, clazz_id, sign_time, delete_time)
+        insert into exercise_system.user_clazz(user_id, clazz_id, sign_time)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.userId}, #{entity.clazzId}, #{entity.signTime}, #{entity.deleteTime})
+            (#{entity.userId}, #{entity.clazzId}, #{entity.signTime})
         </foreach>
         on duplicate key update
-        user_id = values(user_id) , clazz_id = values(clazz_id) , sign_time = values(sign_time) , delete_time =
-        values(delete_time)
+        user_id = values(user_id) , clazz_id = values(clazz_id) , sign_time = values(sign_time)
     </insert>
 
 </mapper>

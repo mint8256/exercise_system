@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.five.dao.SchoolDao">
+
+    <resultMap type="com.five.entity.School" id="SchoolMap">
+        <result property="schoolId" column="school_id" jdbcType="INTEGER"/>
+        <result property="schoolName" column="school_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="schoolId" useGeneratedKeys="true">
+        insert into exercise_system.school(school_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.schoolName})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="schoolId" useGeneratedKeys="true">
+        insert into exercise_system.school(school_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.schoolName})
+        </foreach>
+        on duplicate key update
+        school_name = values(school_name)
+    </insert>
+
+</mapper>
+

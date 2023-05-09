@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.five.dao.UserQuestionDao">
+
+    <resultMap type="com.five.entity.UserQuestion" id="UserQuestionMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userPaperId" column="user_paper_id" jdbcType="INTEGER"/>
+        <result property="paperId" column="paper_id" jdbcType="INTEGER"/>
+        <result property="questionId" column="question_id" jdbcType="INTEGER"/>
+        <result property="userAnswer" column="user_answer" jdbcType="VARCHAR"/>
+        <result property="userScore" column="user_score" jdbcType="NUMERIC"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into exercise_system.user_question(user_paper_id, paper_id, question_id, user_answer, user_score, status)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userPaperId}, #{entity.paperId}, #{entity.questionId}, #{entity.userAnswer}, #{entity.userScore},
+            #{entity.status})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into exercise_system.user_question(user_paper_id, paper_id, question_id, user_answer, user_score, status)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userPaperId}, #{entity.paperId}, #{entity.questionId}, #{entity.userAnswer}, #{entity.userScore},
+            #{entity.status})
+        </foreach>
+        on duplicate key update
+        user_paper_id = values(user_paper_id) , paper_id = values(paper_id) , question_id = values(question_id) ,
+        user_answer = values(user_answer) , user_score = values(user_score) , status = values(status)
+    </insert>
+
+</mapper>
+

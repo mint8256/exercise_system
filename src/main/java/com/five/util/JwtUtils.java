@@ -9,12 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * description:
- *
- * @author fly
- * @since 2022/12/7 20:12
- */
 public class JwtUtils {
 
     private static final String TOKEN_PREFIX = "Bearer ";
@@ -56,7 +50,8 @@ public class JwtUtils {
         HashMap<String, Object> tokenData = new HashMap<>();
         tokenData.put("userId", tokenInfo.getUserId());
         tokenData.put("realName", tokenInfo.getRealName());
-        tokenData.put("roleId", tokenInfo.getRoleId());
+        tokenData.put("roleId", tokenInfo.getRole());
+        tokenData.put("userIdentifier", tokenInfo.getUserIdentifier());
         return JwtUtils.genToken(tokenData, millisecond);
     }
 
@@ -117,9 +112,10 @@ public class JwtUtils {
         Claims parse = parse(token);
         parse.get("", String.class);
         return new TokenInfo.Builder()
-                .username(getInfoData(parse, "realName", String.class))
-                .userId(getInfoData(parse, "userId", Integer.class))
+                .realName(getInfoData(parse, "realName", String.class))
+                .userId(getInfoData(parse, "userId", Long.class))
                 .role(getInfoData(parse, "roleId", Integer.class))
+                .userIdentifier(getInfoData(parse, "userIdentifier", String.class))
                 .build();
     }
 

@@ -1,12 +1,6 @@
 package com.five.util;
 
-/**
- * description:
- *
- * @author fly
- * @since 2022/12/7 21:21
- */
-public class UserInfoThreadLocal {
+public class AuthUserContext {
 
     private static final ThreadLocal<TokenInfo> USER_INFO = new ThreadLocal<>();
 
@@ -19,7 +13,7 @@ public class UserInfoThreadLocal {
     }
 
     public static void clear() {
-        if (UserInfoThreadLocal.get() != null) {
+        if (AuthUserContext.get() != null) {
             USER_INFO.remove();
         }
     }

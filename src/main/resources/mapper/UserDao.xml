@@ -12,23 +12,27 @@
         <result property="schoolId" column="school_id" jdbcType="INTEGER"/>
         <result property="userIdentifier" column="user_identifier" jdbcType="VARCHAR"/>
         <result property="signTime" column="sign_time" jdbcType="TIMESTAMP"/>
-        <result property="deleteTime" column="delete_time" jdbcType="TIMESTAMP"/>
     </resultMap>
+
+    <sql id="all">
+         user_id,username,password,real_name,sex,role,school_id,user_identifier,sign_time
+    </sql>
 
     <!-- 批量插入 -->
     <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
         insert into exercise_system.user(username, password, real_name, sex, role, school_id, user_identifier,
-        sign_time, delete_time)
+        sign_time)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.username}, #{entity.password}, #{entity.realName}, #{entity.sex}, #{entity.role},
-            #{entity.schoolId}, #{entity.userIdentifier}, #{entity.signTime}, #{entity.deleteTime})
+            #{entity.schoolId}, #{entity.userIdentifier}, #{entity.signTime})
         </foreach>
     </insert>
+
     <!-- 批量插入或按主键更新 -->
     <insert id="insertOrUpdateBatch" keyProperty="userId" useGeneratedKeys="true">
         insert into exercise_system.user(username, password, real_name, sex, role, school_id, user_identifier,
-        sign_time, delete_time)
+        sign_time)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.username}, #{entity.password}, #{entity.realName}, #{entity.sex}, #{entity.role},
@@ -37,8 +41,14 @@
         on duplicate key update
         username = values(username) , password = values(password) , real_name = values(real_name) , sex = values(sex) ,
         role = values(role) , school_id = values(school_id) , user_identifier = values(user_identifier) , sign_time =
-        values(sign_time) , delete_time = values(delete_time)
+        values(sign_time)
     </insert>
+
+    <select id="selectByName" resultType="com.five.entity.User">
+        select
+        <include refid="all"></include>
+        from user where username = #{username};
+    </select>
 
 </mapper>
 

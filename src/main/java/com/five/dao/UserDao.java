@@ -33,5 +33,6 @@ public interface UserDao extends BaseMapper<User> {
      */
     int insertOrUpdateBatch(@Param("entities") List<User> entities);
 
+    User selectByName(@Param("username") String username);
 }
 

@@ -2,7 +2,6 @@ package com.five.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.five.entity.Question;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -11,9 +10,8 @@ import java.util.List;
  * (Question)表数据库访问层
  *
  * @author fly
- * @since 2023-05-08 14:13:57
+ * @since 2023-05-09 15:38:12
  */
-@Mapper
 public interface QuestionDao extends BaseMapper<Question> {
 
     /**

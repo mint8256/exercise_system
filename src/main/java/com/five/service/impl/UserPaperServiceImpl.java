@@ -7,10 +7,10 @@ import com.five.service.UserPaperService;
 import org.springframework.stereotype.Service;
 
 /**
- * (UserPaper)表服务实现类
+ * 用户做的试卷记录(UserPaper)表服务实现类
  *
  * @author fly
- * @since 2023-05-08 14:13:59
+ * @since 2023-05-09 15:46:16
  */
 @Service("userPaperService")
 public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> implements UserPaperService {

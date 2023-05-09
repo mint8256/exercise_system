@@ -1,5 +1,4 @@
-package com.five.entity;
-
+package com.five.vo;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -13,16 +12,16 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 
 /**
- * (User)表实体类
+ * description:
  *
  * @author fly
- * @since 2023-05-08 14:13:58
+ * @since 2023/5/9 13:39
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class User {
+public class StudentVo {
     //用户id，主键
     @TableId(type = IdType.AUTO)
     private Long userId;
@@ -38,10 +37,15 @@ public class User {
     private Integer role;
     //学校id，（为了方便生成编号）
     private Long schoolId;
+    //班级
+    private String clazzName;
+    //年级
+    private Integer grade;
+    //学校
+    private String schoolName;
     //用户编号
     private String userIdentifier;
     //注册时间
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime signTime;
 }
-

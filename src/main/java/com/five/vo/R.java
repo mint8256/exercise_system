@@ -32,9 +32,14 @@ public class R<T> {
         return new R<>(200, null, data);
     }
 
+    public static <T> R<T> success(String msg) {
+        return new R<>(200, msg, null);
+    }
     public static <T> R<T> success(String msg, T data) {
         return new R<>(200, msg, data);
     }
+
+
 
     public static <T> R<T> fail() {
         return new R<>(500, null, null);

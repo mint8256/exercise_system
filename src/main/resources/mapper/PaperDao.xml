@@ -4,34 +4,40 @@
 
     <resultMap type="com.five.entity.Paper" id="PaperMap">
         <result property="paperId" column="paper_id" jdbcType="INTEGER"/>
+        <result property="paperName" column="paper_name" jdbcType="VARCHAR"/>
         <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
         <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
         <result property="duration" column="duration" jdbcType="TIMESTAMP"/>
         <result property="questionListId" column="question_list_id" jdbcType="INTEGER"/>
+        <result property="questionCount" column="question_count" jdbcType="INTEGER"/>
         <result property="paperIdentifier" column="paper_identifier" jdbcType="VARCHAR"/>
+        <result property="paperType" column="paper_type" jdbcType="INTEGER"/>
         <result property="signTime" column="sign_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <!-- 批量插入 -->
     <insert id="insertBatch" keyProperty="paperId" useGeneratedKeys="true">
-        insert into exercise_system.paper(start_time, end_time, duration, question_list_id, paper_identifier, sign_time)
+        insert into exercise_system.paper(paper_name, start_time, end_time, duration, question_list_id, question_count,
+        paper_identifier, paper_type, sign_time)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.startTime}, #{entity.endTime}, #{entity.duration}, #{entity.questionListId},
-            #{entity.paperIdentifier}, #{entity.signTime})
+            (#{entity.paperName}, #{entity.startTime}, #{entity.endTime}, #{entity.duration}, #{entity.questionListId},
+            #{entity.questionCount}, #{entity.paperIdentifier}, #{entity.paperType}, #{entity.signTime})
         </foreach>
     </insert>
     <!-- 批量插入或按主键更新 -->
     <insert id="insertOrUpdateBatch" keyProperty="paperId" useGeneratedKeys="true">
-        insert into exercise_system.paper(start_time, end_time, duration, question_list_id, paper_identifier, sign_time)
+        insert into exercise_system.paper(paper_name, start_time, end_time, duration, question_list_id, question_count,
+        paper_identifier, paper_type, sign_time)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.startTime}, #{entity.endTime}, #{entity.duration}, #{entity.questionListId},
-            #{entity.paperIdentifier}, #{entity.signTime})
+            (#{entity.paperName}, #{entity.startTime}, #{entity.endTime}, #{entity.duration}, #{entity.questionListId},
+            #{entity.questionCount}, #{entity.paperIdentifier}, #{entity.paperType}, #{entity.signTime})
         </foreach>
         on duplicate key update
-        start_time = values(start_time) , end_time = values(end_time) , duration = values(duration) , question_list_id =
-        values(question_list_id) , paper_identifier = values(paper_identifier) , sign_time = values(sign_time)
+        paper_name = values(paper_name) , start_time = values(start_time) , end_time = values(end_time) , duration =
+        values(duration) , question_list_id = values(question_list_id) , question_count = values(question_count) ,
+        paper_identifier = values(paper_identifier) , paper_type = values(paper_type) , sign_time = values(sign_time)
     </insert>
 
 </mapper>

@@ -6,29 +6,42 @@
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="userId" column="user_id" jdbcType="INTEGER"/>
         <result property="paperId" column="paper_id" jdbcType="INTEGER"/>
+        <result property="paperName" column="paper_name" jdbcType="VARCHAR"/>
         <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
         <result property="submitTime" column="submit_time" jdbcType="TIMESTAMP"/>
-        <result property="score" column="score" jdbcType="VARCHAR"/>
+        <result property="questionCorrect" column="question_correct" jdbcType="INTEGER"/>
+        <result property="questionCount" column="question_count" jdbcType="INTEGER"/>
+        <result property="userScore" column="user_score" jdbcType="NUMERIC"/>
+        <result property="paperScore" column="paper_score" jdbcType="NUMERIC"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
     </resultMap>
 
     <!-- 批量插入 -->
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into exercise_system.user_paper(user_id, paper_id, start_time, submit_time, score)
+        insert into exercise_system.user_paper(user_id, paper_id, paper_name, start_time, submit_time, question_correct,
+        question_count, user_score, paper_score, status)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.userId}, #{entity.paperId}, #{entity.startTime}, #{entity.submitTime}, #{entity.score})
+            (#{entity.userId}, #{entity.paperId}, #{entity.paperName}, #{entity.startTime}, #{entity.submitTime},
+            #{entity.questionCorrect}, #{entity.questionCount}, #{entity.userScore}, #{entity.paperScore},
+            #{entity.status})
         </foreach>
     </insert>
     <!-- 批量插入或按主键更新 -->
     <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into exercise_system.user_paper(user_id, paper_id, start_time, submit_time, score)
+        insert into exercise_system.user_paper(user_id, paper_id, paper_name, start_time, submit_time, question_correct,
+        question_count, user_score, paper_score, status)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.userId}, #{entity.paperId}, #{entity.startTime}, #{entity.submitTime}, #{entity.score})
+            (#{entity.userId}, #{entity.paperId}, #{entity.paperName}, #{entity.startTime}, #{entity.submitTime},
+            #{entity.questionCorrect}, #{entity.questionCount}, #{entity.userScore}, #{entity.paperScore},
+            #{entity.status})
         </foreach>
         on duplicate key update
-        user_id = values(user_id) , paper_id = values(paper_id) , start_time = values(start_time) , submit_time =
-        values(submit_time) , score = values(score)
+        user_id = values(user_id) , paper_id = values(paper_id) , paper_name = values(paper_name) , start_time =
+        values(start_time) , submit_time = values(submit_time) , question_correct = values(question_correct) ,
+        question_count = values(question_count) , user_score = values(user_score) , paper_score = values(paper_score) ,
+        status = values(status)
     </insert>
 
 </mapper>

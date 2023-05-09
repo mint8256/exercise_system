@@ -5,7 +5,7 @@
     <resultMap type="com.five.entity.Clazz" id="ClazzMap">
         <result property="clazzId" column="clazz_id" jdbcType="INTEGER"/>
         <result property="clazzName" column="clazz_name" jdbcType="VARCHAR"/>
-        <result property="grade" column="grade" jdbcType="INTEGER"/>
+        <result property="grade" column="grade" jdbcType="VARCHAR"/>
         <result property="classNumber" column="class_number" jdbcType="INTEGER"/>
         <result property="schoolId" column="school_id" jdbcType="INTEGER"/>
         <result property="signTime" column="sign_time" jdbcType="TIMESTAMP"/>

@@ -7,53 +7,38 @@ import lombok.ToString;
 @ToString
 public class TokenInfo {
 
-    private Integer userId;
+    private Long userId;
 
-    private Integer roleId;
+    private Integer role;
 
     private String realName;
+    private String userIdentifier;
 
-
-    enum RoleEnum{
-
-        STUDENT(0),
-        DOMITORY_ADMIN(1),
-        ADMIN(2);
-
-        private Integer roleId;
-
-        RoleEnum(){}
-
-        RoleEnum(Integer roleId){
-            this.roleId = roleId;
-        }
-
-        public Integer getRoleId(){
-            return this.roleId;
-        }
-
-    }
-
-    public static class Builder{
+    public static class Builder {
 
         TokenInfo tokenInfo = new TokenInfo();
 
-        public Builder role(Integer roleId){
-            tokenInfo.setRoleId(roleId);
+        public Builder role(Integer role) {
+            tokenInfo.setRole(role);
             return this;
         }
 
-        public Builder userId(Integer userId){
+        public Builder userId(Long userId) {
             tokenInfo.setUserId(userId);
             return this;
         }
 
-        public Builder username(String realName){
+        public Builder realName(String realName) {
             tokenInfo.setRealName(realName);
             return this;
         }
 
-        public TokenInfo build(){
+        public Builder userIdentifier(String userIdentifier) {
+            tokenInfo.setUserIdentifier(userIdentifier);
+            return this;
+        }
+
+        public TokenInfo build() {
             return tokenInfo;
         }
     }

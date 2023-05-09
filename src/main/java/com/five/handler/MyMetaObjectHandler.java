@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 /**
  * description:
  *
@@ -17,16 +19,10 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-//        log.info("start insert fill ....");
-//        if (metaObject.hasGetter("applyTime")) {
-//            this.strictInsertFill(metaObject, "applyTime", Date::new, Date.class);
-//        }
-//        if (metaObject.hasGetter("checkInTime")) {
-//            this.strictInsertFill(metaObject, "checkInTime", Date::new, Date.class);
-//        }
-//        if (metaObject.hasGetter("activeTime")) {
-//            this.strictInsertFill(metaObject, "activeTime", Date::new, Date.class);
-//        }
+        log.debug("start insert fill signTime....");
+        if (metaObject.hasGetter("signTime")) {
+            this.strictInsertFill(metaObject, "signTime", LocalDateTime::now, LocalDateTime.class);
+        }
     }
 
     @Override
