@@ -22,6 +22,7 @@
         <jjwt.version>0.9.1</jjwt.version>
         <hutool.version>5.8.11</hutool.version>
         <knife4j.version>4.0.0</knife4j.version>
+        <orika.version>1.5.4</orika.version>
     </properties>
 
     <dependencyManagement>
@@ -37,7 +38,11 @@
     </dependencyManagement>
 
     <dependencies>
-
+        <dependency>
+            <groupId>ma.glasnost.orika</groupId>
+            <artifactId>orika-core</artifactId>
+            <version>${orika.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>

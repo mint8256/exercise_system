@@ -1,9 +1,7 @@
 package com.five.vo;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,8 +20,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString
 public class StudentVo {
-    //用户id，主键
-    @TableId(type = IdType.AUTO)
+
     private Long userId;
     //用户名
     private String username;
@@ -41,8 +38,6 @@ public class StudentVo {
     private String clazzName;
     //年级
     private Integer grade;
-    //学校
-    private String schoolName;
     //用户编号
     private String userIdentifier;
     //注册时间

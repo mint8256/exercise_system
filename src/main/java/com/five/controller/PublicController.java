@@ -4,7 +4,6 @@ import com.five.entity.User;
 import com.five.exception.BaseException;
 import com.five.service.UserService;
 import com.five.util.JwtUtils;
-import com.five.util.PasswordManager;
 import com.five.util.TokenInfo;
 import com.five.vo.R;
 import lombok.extern.slf4j.Slf4j;
@@ -49,11 +48,9 @@ public class PublicController {
     @PostMapping("register")
     public R<User> register(@RequestBody User register) {
 
-        if (!userService.usernameIsUnique(register.getUsername())) {
+        if (userService.usernameIsExist(register.getUsername())) {
             throw new BaseException("用户名已经被注册，换个用户名试试");
         }
-
-        register.setPassword(PasswordManager.encryption(register.getPassword()));
 
         User user = userService.register(register);
 
