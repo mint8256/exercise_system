@@ -7,7 +7,7 @@
         <result property="questionCount" column="question_count" jdbcType="INTEGER"/>
         <result property="optMax" column="opt_max" jdbcType="INTEGER"/>
         <result property="resMax" column="res_max" jdbcType="INTEGER"/>
-        <result property="grade" column="grade" jdbcType="VARCHAR"/>
+        <result property="grade" column="grade" jdbcType="INTEGER"/>
         <result property="schoolId" column="school_id" jdbcType="INTEGER"/>
         <result property="questionListNumber" column="question_list_number" jdbcType="INTEGER"/>
         <result property="questionListIdentifier" column="question_list_identifier" jdbcType="VARCHAR"/>
