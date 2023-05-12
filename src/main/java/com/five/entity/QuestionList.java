@@ -29,10 +29,15 @@ public class QuestionList{
     private Integer optMax;
     //最大结果值
     private Integer resMax;
+
+    // 最小结果值
+    private Integer resMin;
+
     //年级（如：2020）
     private Integer grade;
     // 题目列表难度（简单，中等，困难）题目列表的难度等级粗略的认为对应难度的题目占比要 >= 60%
     private String questionListDifficulty;
+
     //学校id
     private Long schoolId;
     //题目列表序号
@@ -44,7 +49,12 @@ public class QuestionList{
     private LocalDateTime signTime;
     //试卷列表的总分
     private Integer score;
+
+    // 题目类型
+    private Integer type;
+
     //创建人
     private Long userId;
+
 }
 
