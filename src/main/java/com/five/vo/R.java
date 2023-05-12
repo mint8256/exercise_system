@@ -40,7 +40,6 @@ public class R<T> {
     }
 
 
-
     public static <T> R<T> fail() {
         return new R<>(500, null, null);
     }

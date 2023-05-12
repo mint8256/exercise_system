@@ -12,6 +12,10 @@ public class AuthUserContext {
         return USER_INFO.get();
     }
 
+    public static Long userId() {
+        return USER_INFO.get().getUserId();
+    }
+
     public static void clear() {
         if (AuthUserContext.get() != null) {
             USER_INFO.remove();

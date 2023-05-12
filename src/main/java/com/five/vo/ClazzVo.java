@@ -1,10 +1,7 @@
-package com.five.entity;
-
+package com.five.vo;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,23 +10,22 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 
 /**
- * (Clazz)表实体类
+ * description:
  *
  * @author fly
- * @since 2023-05-08 14:13:58
+ * @since 2023/5/9 16:10
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Clazz {
+public class ClazzVo {
     //班级id，主键
-    @TableId(type = IdType.AUTO)
     private Long clazzId;
     //班级名称
     private String clazzName;
-    //年级（如：2020）
-    private Integer grade;
+    //年级
+    private String grade;
     //班级序号
     private Integer classNumber;
     //学校id
@@ -37,6 +33,8 @@ public class Clazz {
     //创建时间
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime signTime;
+    //班级人数
+    private Long count;
     //班级编号
     private String clazzIdentifier;
 }
