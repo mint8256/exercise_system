@@ -13,6 +13,7 @@
         <result property="questionListIdentifier" column="question_list_identifier" jdbcType="VARCHAR"/>
         <result property="signTime" column="sign_time" jdbcType="TIMESTAMP"/>
         <result property="score" column="score" jdbcType="INTEGER"/>
+        <result property="resMin" column="res_min" javaType="INTEGER"/>
     </resultMap>
 
     <!-- 批量插入 -->

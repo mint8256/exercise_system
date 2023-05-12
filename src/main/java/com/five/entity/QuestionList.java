@@ -29,8 +29,10 @@ public class QuestionList{
     private Integer optMax;
     //最大结果值
     private Integer resMax;
+    // 最小结果值
+    private Integer resMin;
     //年级（如：2020级）
-    private String grade;
+    private Integer grade;
     //学校id
     private Long schoolId;
     //题目列表序号
@@ -42,5 +44,7 @@ public class QuestionList{
     private LocalDateTime signTime;
     //试卷列表的总分
     private Integer score;
+    // 题目类型
+    private Integer type;
 }
 
