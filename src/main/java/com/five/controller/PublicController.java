@@ -6,6 +6,7 @@ import com.five.service.UserService;
 import com.five.util.JwtUtils;
 import com.five.util.TokenInfo;
 import com.five.vo.R;
+import com.five.vo.RCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,7 +50,7 @@ public class PublicController {
     public R<User> register(@RequestBody User register) {
 
         if (userService.usernameIsExist(register.getUsername())) {
-            throw new BaseException("用户名已经被注册，换个用户名试试");
+            throw new BaseException(RCodeEnum.USERNAME_IS_EXIST);
         }
 
         User user = userService.register(register);

@@ -2,7 +2,9 @@ package com.five.entity;
 
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +24,7 @@ import java.time.LocalDateTime;
 @ToString
 public class QuestionList{
 
+    @TableId(type = IdType.AUTO)
     private Integer questionListId;
     //题目数量
     private Integer questionCount;

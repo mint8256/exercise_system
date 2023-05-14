@@ -19,6 +19,7 @@ import com.five.service.UserClazzService;
 import com.five.service.UserService;
 import com.five.util.*;
 import com.five.vo.MyPage;
+import com.five.vo.RCodeEnum;
 import com.five.vo.StudentVo;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
@@ -60,11 +61,11 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
 
         log.debug("查询到的用户信息为：{}", user);
 
-        Optional.ofNullable(user.getUserId()).orElseThrow(() -> new BaseException("用户名错误"));
+        Optional.ofNullable(user.getUserId()).orElseThrow(() -> new BaseException(RCodeEnum.LOGIN_FAIL));
 
         boolean checkPass = PasswordManager.checkPass(login.getPassword(), user.getPassword());
 
-        if (!checkPass) throw new BaseException("密码错误");
+        if (!checkPass) throw new BaseException(RCodeEnum.PASSWORD_ERROR);
 
         user.setPassword("");
 
