@@ -85,12 +85,11 @@ public class ClazzController {
 
     @Operation(summary = "查询班级")
     @AuthVerify(roles = RoleEnum.TEACHER)
-    @GetMapping
+    @PostMapping
     public R<List<ClazzVo>> queryList(@RequestBody Clazz clazz) {
 
         List<ClazzVo> list = clazzService.queryList(clazz);
 
         return R.success(list);
     }
-
 }

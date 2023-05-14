@@ -44,7 +44,7 @@ public class QuestionListController {
     @AuthVerify(roles = RoleEnum.TEACHER)
     @DeleteMapping("{questionListId}")
     public R<Void> delete(@PathVariable("questionListId") Long questionListId) {
-        questionListService.removeById(questionListId);
+        questionListService.delete(questionListId);
         return R.success("删除成功");
     }
 

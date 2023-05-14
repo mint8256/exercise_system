@@ -11,5 +11,10 @@ import com.five.entity.Question;
  */
 public interface QuestionService extends IService<Question> {
 
+    /**
+     * 根据questionListId删除对应的题目。
+     */
+    void removeByQuestionListId(Long questionListId);
+
 }
 

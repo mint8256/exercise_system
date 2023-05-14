@@ -2,10 +2,12 @@ package com.five.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.five.dao.QuestionDao;
 import com.five.dao.QuestionListDao;
 import com.five.entity.QuestionList;
 import com.five.service.QuestionListService;
 import com.five.util.AuthUserContext;
+import com.five.util.SpringContextUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -23,6 +25,9 @@ public class QuestionListServiceImpl extends ServiceImpl<QuestionListDao, Questi
     @Resource
     private QuestionListDao questionListDao;
 
+    @Resource
+    private QuestionDao questionDao;
+
     @Override
     public void genQuestionList(QuestionList questionList) {
 
@@ -39,6 +44,16 @@ public class QuestionListServiceImpl extends ServiceImpl<QuestionListDao, Questi
         queryWrapper.eq(QuestionList::getUserId, userId);
 
         return this.list(queryWrapper);
+    }
+
+    @Override
+    public void delete(Long questionListId) {
+
+        // 首先删除其对应的试题列表中包含的题目
+        SpringContextUtil.getBean(QuestionServiceImpl.class).removeByQuestionListId(questionListId);
+
+        this.removeById(questionListId);
+
     }
 }
 
