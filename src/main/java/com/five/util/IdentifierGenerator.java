@@ -20,6 +20,23 @@ public class IdentifierGenerator {
                 addLeadingZero(clazz.getClassNumber(), 2);
     }
 
+    /**
+     * 生成用户的编号
+     *
+     * @param schoolId    学校id
+     * @param year        入学年份（当前年份 - 年级）
+     * @param clazzNumber 班级序号
+     * @param number      个人序号
+     */
+    public static String genStudentIdentifier(Long schoolId, Integer year, Integer clazzNumber, Integer number) {
+
+        return "S" +
+                addLeadingZero(schoolId, 2) +
+                addLeadingZero(year, 2) +
+                addLeadingZero(clazzNumber, 2) +
+                addLeadingZero(number, 2);
+    }
+
     public static String genTeacherIdentifier(Long schoolId, Integer number) {
 
         return "T" +

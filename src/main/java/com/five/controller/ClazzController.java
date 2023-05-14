@@ -20,7 +20,7 @@ import java.util.List;
  * @since 2023/5/9 16:09
  */
 @RestController
-@RequestMapping("class")
+@RequestMapping("clazz")
 public class ClazzController {
 
     @Resource
@@ -31,7 +31,7 @@ public class ClazzController {
     @GetMapping("list")
     public R<List<ClazzVo>> getClazzList() {
 
-        List<ClazzVo> clazzVoList = clazzService.getClazzList();
+        List<ClazzVo> clazzVoList = clazzService.getClazzVoList();
 
         return R.success(clazzVoList);
     }

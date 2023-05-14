@@ -24,8 +24,6 @@ public class StudentVo {
     private Long userId;
     //用户名
     private String username;
-    //用户密码
-    private String password;
     //真实姓名
     private String realName;
     //0：未知，1：男，2：女
@@ -33,7 +31,7 @@ public class StudentVo {
     //0：学生，1：教师，2：管理员
     private Integer role;
     //学校id，（为了方便生成编号）
-    private Long schoolId;
+    private String schoolName;
     //班级
     private String clazzName;
     //年级

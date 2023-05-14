@@ -17,7 +17,7 @@ public class JwtUtils {
     /**
      * 默认token有效时长 30 分钟
      */
-    private static final int DEFAULT_VALIDATE_TIME = 1000 * 60 * 30;
+    private static final int DEFAULT_VALIDATE_TIME = 1000 * 60 * 30 * 100;
 
     /**
      * 解析Token

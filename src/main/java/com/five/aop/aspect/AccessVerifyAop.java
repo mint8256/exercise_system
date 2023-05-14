@@ -49,7 +49,7 @@ public class AccessVerifyAop {
         // 鉴权
         checkRole(tokenInfo, authVerify);
 
-        AuthUserContext.put(tokenInfo);
+        AuthUserContext.set(tokenInfo);
     }
 
     @After(value = "tokenPointcut() && @annotation(authVerify)")
@@ -69,7 +69,7 @@ public class AccessVerifyAop {
     private void checkRole(TokenInfo tokenInfo, AuthVerify authVerify) {
 
         for (RoleEnum roleEnum : authVerify.roles()) {
-            if (roleEnum.getRole().equals(tokenInfo.getRole())) {
+            if (roleEnum.value().equals(tokenInfo.getRole())) {
                 return;
             }
         }
