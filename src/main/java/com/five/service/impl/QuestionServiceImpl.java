@@ -8,6 +8,7 @@ import com.five.service.QuestionService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * (Question)表服务实现类
@@ -27,6 +28,16 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionDao, Question> impl
         queryWrapper.eq(Question::getQuestionListId,questionListId);
 
         questionDao.delete(queryWrapper);
+    }
+
+    @Override
+    public List<Question> getByQuestionListId(Long questionListId) {
+
+
+        LambdaQueryWrapper<Question> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Question::getQuestionListId,questionListId);
+
+       return questionDao.selectList(queryWrapper);
     }
 }
 

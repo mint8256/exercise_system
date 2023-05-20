@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -30,12 +31,11 @@ public class UserController {
     @Operation(summary = "批量导入学生信息")
     @AuthVerify(roles = RoleEnum.TEACHER)
     @PostMapping("batch")
-    public R<List<StudentVo>> batchImportStudents(@RequestPart("file") MultipartFile file) {
+    public R<Void> batchImportStudents(@RequestPart("file") MultipartFile file, String clazzName) throws IOException {
 
-        // 获取教师的学校
-        List<StudentVo> list = userService.batchImportStudents(file);
+        userService.batchImportStudents(file, clazzName);
 
-        return R.success("全部学生导入成功", list);
+        return R.success("全部学生导入成功");
     }
 
     @Operation(summary = "获取该教师管理的学生信息，分页查询，并提供额外的查询条件")
@@ -51,10 +51,21 @@ public class UserController {
     @Operation(summary = "移除学生信息")
     @AuthVerify(roles = RoleEnum.TEACHER)
     @DeleteMapping("/{userId}")
-    public R<Void> deleteStudent(@PathVariable("userId")Long userId){
+    public R<Void> deleteStudent(@PathVariable("userId") Long userId) {
 
         userService.deleteStudent(userId);
 
         return R.success("移除成功");
     }
+
+    @Operation(summary = "查询个人信息")
+    @AuthVerify(roles = {RoleEnum.STUDENT, RoleEnum.ADMIN})
+    @GetMapping
+    public R<StudentVo> getSelf() {
+
+        StudentVo studentVo = userService.self();
+
+        return R.success(studentVo);
+    }
+
 }

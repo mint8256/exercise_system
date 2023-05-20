@@ -1,30 +1,26 @@
-package com.five.entity;
-
+package com.five.vo;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.five.entity.Clazz;
+import com.five.entity.Question;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
- * (Paper)表实体类
+ * description:
  *
  * @author fly
- * @since 2023-05-09 15:46:16
+ * @since 2023/5/15 16:59
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-public class Paper {
-    //试卷id
-    @TableId(type = IdType.AUTO)
+public class PaperDetail {
     private Long paperId;
     //试卷名称
     private String paperName;
@@ -39,19 +35,22 @@ public class Paper {
     //题目数量
     private Integer questionCount;
     //试卷总分
-    private Double paperScore;
+    private Double score;
     //试卷编号
     private String paperIdentifier;
     //试卷难度
     private String paperDifficulty;
-    //试卷类型( 0：练习试卷 1：时段试卷 )
+    // 试卷类型
     private Integer paperType;
     //创建时间
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime signTime;
+    //发布人id
+    private Long userId;
     //试卷状态（0：未发布，1：已发布）
     private Integer status;
-    //创建人id
-    private Long userId;
+    //关联的班级信息（有可能关联多个班级）
+    List<Clazz> clazzList;
+    //关联的题目信息
+    List<Question> questionList;
 }
-

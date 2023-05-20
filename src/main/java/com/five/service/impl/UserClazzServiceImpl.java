@@ -30,6 +30,7 @@ public class UserClazzServiceImpl extends ServiceImpl<UserClazzDao, UserClazz> i
         return userClazzDao.selectList(queryWrapper);
     }
 
+
     @Override
     public UserClazz getOneByUserId(Long userId) {
         LambdaQueryWrapper<UserClazz> queryWrapper = new LambdaQueryWrapper<>();

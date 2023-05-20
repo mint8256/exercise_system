@@ -24,6 +24,7 @@ public enum RCodeEnum {
     EMAIL_NOT_EXIST(1009, "该邮箱暂未注册！"),
     TOKEN_NOT_EXIST(1010, "token 为空！"),
     USERNAME_IS_EXIST(1011, "用户名已经存在，换个用户名试试"),
+    PAPER_NAME_IS_EXIST(1012, "试卷名称已经存在，换个试卷名试试"),
     ;
 
     private final Integer code;

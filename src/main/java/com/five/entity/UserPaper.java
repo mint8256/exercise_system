@@ -42,7 +42,7 @@ public class UserPaper {
     private Double userScore;
     //试卷总分
     private Double paperScore;
-    //试卷类型：（0：未完成，1：已完成）
+    //试卷类型：（0：未开始，1：未完成，2：已做成，3：已批改）
     private Integer status;
 }
 
