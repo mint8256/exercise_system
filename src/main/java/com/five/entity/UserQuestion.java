@@ -31,7 +31,9 @@ public class UserQuestion {
     private String userAnswer;
     //用户得分
     private Double userScore;
-    //是否正确（0：错了，1：正确了）
+    //题目分数
+    private Double questionScore;
+    //是否正确（0：错了，1：对了，2：未做）
     private Integer status;
 }
 

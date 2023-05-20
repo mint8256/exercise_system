@@ -7,6 +7,7 @@ import com.five.dao.ClazzDao;
 import com.five.dao.UserClazzDao;
 import com.five.dao.UserDao;
 import com.five.entity.*;
+import com.five.enums.RoleEnum;
 import com.five.service.ClazzService;
 import com.five.service.PaperClazzService;
 import com.five.service.UserClazzService;
@@ -21,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -71,9 +71,12 @@ public class ClazzServiceImpl extends ServiceImpl<ClazzDao, Clazz> implements Cl
 
         List<UserClazz> userClazzList = userClazzService.getListByClazzId(clazzId);
 
-        Set<Long> userIds = userClazzList.stream().map(UserClazz::getUserId).filter(id -> !Objects.equals(id, AuthUserContext.userId())).collect(Collectors.toSet());
+        // 此时是包含，教师的
+        Set<Long> userIds = userClazzList.stream().map(UserClazz::getUserId).collect(Collectors.toSet());
 
         List<User> users = userDao.selectBatchIds(userIds);
+        // 过滤掉老师
+        users = users.stream().filter((u) -> u.getRole().equals(RoleEnum.STUDENT.value())).collect(Collectors.toList());
 
         return users.stream().map(SpringContextUtil.getBean(UserServiceImpl.class)::userToVo).collect(Collectors.toList());
     }

@@ -36,6 +36,10 @@ public class StudentVo {
     private String clazzName;
     //年级
     private Integer grade;
+    //班级序号
+    private Integer classNumber;
+    //班级编号
+    private String clazzIdentifier;
     //用户编号
     private String userIdentifier;
     //注册时间

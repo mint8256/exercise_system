@@ -3,6 +3,8 @@ package com.five.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.five.entity.Question;
 
+import java.util.List;
+
 /**
  * (Question)表服务接口
  *
@@ -16,5 +18,12 @@ public interface QuestionService extends IService<Question> {
      */
     void removeByQuestionListId(Long questionListId);
 
+    /**
+     * 根据题目列表id获取全部题目
+     */
+    List<Question> getByQuestionListId(Long questionListId);
+
+
 }
+
 

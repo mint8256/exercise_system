@@ -177,6 +177,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         }
 
         Page<User> userPage = new Page<>();
+        userPage.setSize(userQuery.getSize()).setCurrent(userQuery.getPage());
 
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
 
@@ -211,6 +212,8 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
 
         vo.setClazzName(clazz.getClazzName());
         vo.setGrade(clazz.getGrade());
+        vo.setClassNumber(clazz.getClassNumber());
+        vo.setClazzIdentifier(clazz.getClazzIdentifier());
 
         School school = schoolDao.selectById(user.getSchoolId());
         vo.setSchoolName(school.getSchoolName());
@@ -255,6 +258,12 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     @Override
     public int insertBatch(List<User> entities) {
         return userDao.insertBatch(entities);
+    }
+
+    @Override
+    public boolean isStudent(Long userId) {
+        User user = userDao.selectById(userId);
+        return user != null && user.getRole().equals(RoleEnum.STUDENT.value());
     }
 
 }

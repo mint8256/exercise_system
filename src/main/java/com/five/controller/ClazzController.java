@@ -26,12 +26,33 @@ public class ClazzController {
     @Resource
     private ClazzService clazzService;
 
-    @Operation(summary = "获取全部班级列表")
+    @Operation(summary = "获取全部班级详细信息")
     @AuthVerify(roles = RoleEnum.TEACHER)
     @GetMapping("list")
-    public R<List<ClazzVo>> getClazzList() {
+    public R<List<ClazzVo>> getClazzVoList() {
 
         List<ClazzVo> clazzVoList = clazzService.getClazzVoList();
+
+        return R.success(clazzVoList);
+    }
+
+    @Operation(summary = "获取某个班级信息")
+    @AuthVerify(roles = RoleEnum.TEACHER)
+    @GetMapping("{clazzId}")
+    public R<ClazzVo> getClazzVo(@PathVariable("clazzId") Long clazzId) {
+
+        Clazz clazz = clazzService.getById(clazzId);
+        ClazzVo clazzVo = clazzService.clazzToVo(clazz);
+
+        return R.success(clazzVo);
+    }
+
+    @Operation(summary = "获取全部班级简略信息")
+    @AuthVerify(roles = RoleEnum.TEACHER)
+    @GetMapping("listInfo")
+    public R<List<Clazz>> getClazzList() {
+
+        List<Clazz> clazzVoList = clazzService.getClazzList();
 
         return R.success(clazzVoList);
     }
@@ -51,6 +72,7 @@ public class ClazzController {
 
         return R.success("创建成功");
     }
+
 
     @Operation(summary = "更新班级信息")
     @AuthVerify(roles = RoleEnum.TEACHER)

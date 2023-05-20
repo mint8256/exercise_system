@@ -117,5 +117,10 @@ public interface UserService extends IService<User> {
      * @return 影响行数
      */
     int insertBatch(@Param("entities") List<User> entities);
+
+    /**
+     * 判断该userId是否是学生
+     */
+    boolean isStudent(Long userId);
 }
 
