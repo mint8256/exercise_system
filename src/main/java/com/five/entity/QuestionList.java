@@ -49,6 +49,8 @@ public class QuestionList{
     private LocalDateTime signTime;
     //试卷列表的总分
     private Double score;
+    // 题目列表类型
+    private int type;
     //创建人
     private Long userId;
 }
