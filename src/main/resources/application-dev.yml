@@ -28,3 +28,9 @@ logging:
     com:
       five:
           debug
+
+# openapi文档
+springdoc:
+  api-docs:
+    enabled: true
+  packages-to-scan: com.five

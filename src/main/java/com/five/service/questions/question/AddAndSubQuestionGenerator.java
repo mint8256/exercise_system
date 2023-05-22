@@ -2,7 +2,8 @@ package com.five.service.questions.question;
 
 
 import com.five.enums.OperationEnum;
-import com.five.service.questions.model.Question;
+import com.five.service.questions.model.Arithmetic;
+import com.five.service.questions.model.QuestionParameterLimit;
 import com.five.util.ArithmeticUtil;
 
 import java.util.ArrayList;
@@ -26,8 +27,8 @@ public class AddAndSubQuestionGenerator implements QuestionGenerator{
 
 
     @Override
-    public Question generator(List<Integer> operateNums) {
-        Question question = new Question();
+    public Arithmetic generator(List<Integer> operateNums) {
+        Arithmetic arithmetic = new Arithmetic();
         List<OperationEnum> operationSymbols = new ArrayList<>();
         // 随机设置几个操作符
         Random random = new Random();
@@ -36,33 +37,21 @@ public class AddAndSubQuestionGenerator implements QuestionGenerator{
             int index = random.nextInt(2);
             operationSymbols.add(OPERATION_ENUM_LIST.get(index));
         }
-        question.setOperateNums(operateNums);
-        question.setOperateSymbols(operationSymbols);
-        calculateAnswer(question);
-        return question;
+        arithmetic.setOperateNums(operateNums);
+        arithmetic.setOperateSymbols(operationSymbols);
+        ArithmeticUtil.calculateAnswer(arithmetic);
+        return arithmetic;
     }
 
-    /**
-     * 计算算式的结果
-     * @param question 问题
-     */
-    private void calculateAnswer(Question question){
-        List<Integer> operateNums = question.getOperateNums();
-        List<OperationEnum> operateSymbols = question.getOperateSymbols();
-        Integer answer = operateNums.get(0);
-        for (int i = 1;i < operateNums.size();i++){
-            answer = ArithmeticUtil.getOperateResult(answer,operateSymbols.get(i - 1),operateNums.get(i));
-        }
-        question.setAnswer(answer);
-    }
+
 
     @Override
-    public Question generator() {
+    public Arithmetic generator(QuestionParameterLimit questionParameterLimit) {
         Random random = new Random();
-        int num = random.nextInt(6) + 2;
+        int num = random.nextInt(7) + 2;
         List<Integer> operatorNums = new ArrayList<>();
         for (int i = 0; i < num; i++) {
-            operatorNums.add(random.nextInt(100));
+            operatorNums.add(random.nextInt(questionParameterLimit.getMaxResultLimit()));
         }
         return generator(operatorNums);
     }

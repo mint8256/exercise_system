@@ -2,7 +2,8 @@ package com.five.service.questions.question;
 
 
 
-import com.five.service.questions.model.Question;
+import com.five.service.questions.model.Arithmetic;
+import com.five.service.questions.model.QuestionParameterLimit;
 
 import java.util.List;
 
@@ -16,12 +17,12 @@ public interface QuestionGenerator {
      * @param operateNums 操作数集合
      * @return 返回一个问题
      */
-    Question generator(List<Integer> operateNums);
+    Arithmetic generator(List<Integer> operateNums);
 
     /**
      * 自行生成一个问题，包括自行生成操作数
      * @return 一个算式问题
      */
-    Question generator();
+    Arithmetic generator(QuestionParameterLimit questionParameterLimit);
 
 }

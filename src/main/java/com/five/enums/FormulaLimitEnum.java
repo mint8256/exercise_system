@@ -9,6 +9,7 @@ public enum FormulaLimitEnum {
     MUST_DIVISOR(2,"除法必须能被整除！"),
     QUESTION_RESULT_CHECK(3,"结果大小限制"),
     NUM_LIMIT(4,"题目数量限制"),
+    MULTIPlY_LIMIT(4,"复杂的题目数量限制"),
     ;
 
     /**

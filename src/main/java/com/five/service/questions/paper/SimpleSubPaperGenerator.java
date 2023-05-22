@@ -5,19 +5,19 @@ import com.five.service.questions.model.Arithmetic;
 import com.five.service.questions.model.ArithmeticPaper;
 import com.five.service.questions.model.ExecuteResult;
 import com.five.service.questions.model.QuestionParameterLimit;
-import com.five.service.questions.question.SimpleAddQuestionGenerator;
+import com.five.service.questions.question.SimpleSubQuestionGenerator;
 
 import java.util.Random;
 
 /**
  * @description
  * @Author cxk
- * @Date 2023/5/12 23:09
+ * @Date 2023/5/15 19:56
  */
-public class SimpleAddPaperGenerator extends AbstractPaperGenerator{
+public class SimpleSubPaperGenerator extends AbstractPaperGenerator {
 
-    public SimpleAddPaperGenerator(){
-        generators.add(new SimpleAddQuestionGenerator());
+    public SimpleSubPaperGenerator(){
+        generators.add(new SimpleSubQuestionGenerator());
     }
 
     @Override

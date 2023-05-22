@@ -13,7 +13,7 @@ public class ExecuteResult {
     /**
      * 题目
      */
-    private Question question;
+    private Arithmetic arithmetic;
 
     /**
      * 题目数量达到最大值
@@ -23,14 +23,14 @@ public class ExecuteResult {
     public ExecuteResult() {
     }
 
-    public ExecuteResult(boolean isLimit, Question question) {
+    public ExecuteResult(boolean isLimit, Arithmetic arithmetic) {
         this.legal = isLimit;
-        this.question = question;
+        this.arithmetic = arithmetic;
     }
 
-    public ExecuteResult(boolean isLimit, Question question,boolean isMaxNum) {
+    public ExecuteResult(boolean isLimit, Arithmetic arithmetic, boolean isMaxNum) {
         this.legal = isLimit;
-        this.question = question;
+        this.arithmetic = arithmetic;
         this.isMaxNum = isMaxNum;
     }
 
@@ -42,12 +42,12 @@ public class ExecuteResult {
         this.legal = legal;
     }
 
-    public Question getQuestion() {
-        return question;
+    public Arithmetic getQuestion() {
+        return arithmetic;
     }
 
-    public void setQuestion(Question question) {
-        this.question = question;
+    public void setQuestion(Arithmetic arithmetic) {
+        this.arithmetic = arithmetic;
     }
 
     public boolean isMaxNum() {

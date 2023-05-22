@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * (Question)表实体类
+ * (Arithmetic)表实体类
  *
  * @author fly
  * @since 2023-05-09 15:38:12

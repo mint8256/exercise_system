@@ -7,7 +7,7 @@ import com.five.service.QuestionService;
 import org.springframework.stereotype.Service;
 
 /**
- * (Question)表服务实现类
+ * (Arithmetic)表服务实现类
  *
  * @author fly
  * @since 2023-05-09 15:38:13
