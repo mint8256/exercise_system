@@ -1,8 +1,5 @@
 package com.five.enums;
 
-import lombok.Getter;
-
-@Getter
 public enum RoleEnum {
 
     STUDENT(0, "学生"),
@@ -17,4 +14,11 @@ public enum RoleEnum {
         this.describe = describe;
     }
 
+    public Integer value() {
+        return role;
+    }
+
+    public String getDescribe() {
+        return describe;
+    }
 }

@@ -43,6 +43,11 @@
         question_count = values(question_count) , user_score = values(user_score) , paper_score = values(paper_score) ,
         status = values(status)
     </insert>
+    <delete id="deleteByPaperId">
+        delete
+        from user_paper
+        where paper_id = #{paperId};
+    </delete>
 
 </mapper>
 

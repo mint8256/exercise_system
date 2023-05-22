@@ -4,7 +4,7 @@ public class AuthUserContext {
 
     private static final ThreadLocal<TokenInfo> USER_INFO = new ThreadLocal<>();
 
-    public static void put(TokenInfo tokenInfo) {
+    public static void set(TokenInfo tokenInfo) {
         USER_INFO.set(tokenInfo);
     }
 

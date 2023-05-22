@@ -1,28 +1,21 @@
-package com.five.entity;
+package com.five.vo;
 
-
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import lombok.AllArgsConstructor;
+import com.five.entity.UserQuestion;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
- * 用户做的试卷记录(UserPaper)表实体类
+ * description:
  *
  * @author fly
- * @since 2023-05-09 15:46:16
+ * @since 2023/5/22 13:29
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
-public class UserPaper {
+public class UserPaperDetail {
+
     //id
-    @TableId(type = IdType.AUTO)
     private Long id;
     //用户id
     private Long userId;
@@ -34,6 +27,8 @@ public class UserPaper {
     private LocalDateTime startTime;
     //提交时间
     private LocalDateTime submitTime;
+    //持续时间(单位：s)
+    private Long duration;
     //用户做对的题目数量
     private Integer questionCorrect;
     //试卷题目总数
@@ -44,5 +39,7 @@ public class UserPaper {
     private Double paperScore;
     //试卷类型：（0：未开始，1：未完成，2：已做成，3：已批改）
     private Integer status;
-}
+    //用户做题列表
+    private List<UserQuestion> userQuestionList;
 
+}

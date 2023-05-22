@@ -29,7 +29,7 @@ logging:
       five:
           debug
 
-# openapi文档
+springdoc:
 springdoc:
   api-docs:
     enabled: true

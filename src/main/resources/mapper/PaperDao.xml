@@ -12,33 +12,46 @@
         <result property="questionCount" column="question_count" jdbcType="INTEGER"/>
         <result property="paperIdentifier" column="paper_identifier" jdbcType="VARCHAR"/>
         <result property="paperType" column="paper_type" jdbcType="INTEGER"/>
+        <result property="paperDifficulty" column="paper_difficulty" jdbcType="VARCHAR"/>
         <result property="signTime" column="sign_time" jdbcType="TIMESTAMP"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="paperScore" column="paper_score" jdbcType="NUMERIC"/>
     </resultMap>
 
     <!-- 批量插入 -->
     <insert id="insertBatch" keyProperty="paperId" useGeneratedKeys="true">
         insert into exercise_system.paper(paper_name, start_time, end_time, duration, question_list_id, question_count,
-        paper_identifier, paper_type, sign_time)
+        paper_identifier,paper_difficulty, paper_type, sign_time,user_id,status,paper_score)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.paperName}, #{entity.startTime}, #{entity.endTime}, #{entity.duration}, #{entity.questionListId},
-            #{entity.questionCount}, #{entity.paperIdentifier}, #{entity.paperType}, #{entity.signTime})
+            #{entity.questionCount}, #{entity.paperIdentifier},{entities.paperDifficulty}, #{entity.paperType},
+            #{entity.signTime},#{entities.userId},${entities.status},#{entities.paperScore})
         </foreach>
     </insert>
     <!-- 批量插入或按主键更新 -->
     <insert id="insertOrUpdateBatch" keyProperty="paperId" useGeneratedKeys="true">
         insert into exercise_system.paper(paper_name, start_time, end_time, duration, question_list_id, question_count,
-        paper_identifier, paper_type, sign_time)
+        paper_identifier, paper_difficulty,paper_type, sign_time,user_id,status,paper_score)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.paperName}, #{entity.startTime}, #{entity.endTime}, #{entity.duration}, #{entity.questionListId},
-            #{entity.questionCount}, #{entity.paperIdentifier}, #{entity.paperType}, #{entity.signTime})
+            #{entity.questionCount}, #{entity.paperIdentifier},{entities.paperDifficulty}, #{entity.paperType},
+            #{entity.signTime},#{entities.userId},${entities.status},#{entities,paperScore})
         </foreach>
         on duplicate key update
         paper_name = values(paper_name) , start_time = values(start_time) , end_time = values(end_time) , duration =
         values(duration) , question_list_id = values(question_list_id) , question_count = values(question_count) ,
-        paper_identifier = values(paper_identifier) , paper_type = values(paper_type) , sign_time = values(sign_time)
+        paper_identifier = values(paper_identifier) ,paper_difficulty = values(paper_difficulty), paper_type =
+        values(paper_type) , sign_time = values(sign_time),user_id = values(user_id),status = values(status),paper_score
+        = values(paper_score)
     </insert>
+    <delete id="deleteByQuestionListId">
+        delete
+        from paper
+        where question_list_id = #{questionListId};
+    </delete>
 
 </mapper>
 

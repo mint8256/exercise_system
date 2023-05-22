@@ -10,28 +10,31 @@
         <result property="userAnswer" column="user_answer" jdbcType="VARCHAR"/>
         <result property="userScore" column="user_score" jdbcType="NUMERIC"/>
         <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="questionScore" column="question_score" jdbcType="NUMERIC"/>
     </resultMap>
 
     <!-- 批量插入 -->
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into exercise_system.user_question(user_paper_id, paper_id, question_id, user_answer, user_score, status)
+        insert into exercise_system.user_question(user_paper_id, paper_id, question_id, user_answer, user_score, status,question_score)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.userPaperId}, #{entity.paperId}, #{entity.questionId}, #{entity.userAnswer}, #{entity.userScore},
-            #{entity.status})
+            #{entity.status},#{entities.questionScore})
         </foreach>
     </insert>
     <!-- 批量插入或按主键更新 -->
     <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into exercise_system.user_question(user_paper_id, paper_id, question_id, user_answer, user_score, status)
+        insert into exercise_system.user_question(user_paper_id, paper_id, question_id, user_answer, user_score,
+        status,question_score)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.userPaperId}, #{entity.paperId}, #{entity.questionId}, #{entity.userAnswer}, #{entity.userScore},
-            #{entity.status})
+            #{entity.status},#{entities.questionScore})
         </foreach>
         on duplicate key update
         user_paper_id = values(user_paper_id) , paper_id = values(paper_id) , question_id = values(question_id) ,
-        user_answer = values(user_answer) , user_score = values(user_score) , status = values(status)
+        user_answer = values(user_answer) , user_score = values(user_score) , status =
+        values(status),question_score=values(question_score)
     </insert>
 
 </mapper>

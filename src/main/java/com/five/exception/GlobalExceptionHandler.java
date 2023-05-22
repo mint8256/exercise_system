@@ -19,16 +19,23 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler({DataIntegrityViolationException.class, SQLIntegrityConstraintViolationException.class})
-    public R sQLIntegrityConstraintViolationException(Exception e){
+    public R sQLIntegrityConstraintViolationException(Exception e) {
         log.error(e.getMessage());
         return R.fail(RCodeEnum.FOREIGN_ERROR);
     }
 
+    @ExceptionHandler(BaseException.class)
+    public R baseException(BaseException e) {
+        RCodeEnum codeEnum = e.getResponseDataEnum();
+        return R.fail(codeEnum);
+    }
+
+
     @ExceptionHandler(Exception.class)
-    public R exception(Exception e){
+    public R exception(Exception e) {
         LOGGER.error("================系统发生了错误==========");
-        LOGGER.error("发生错误的原因：{}",e.getMessage());
-        LOGGER.error("异常链为   ",e.getCause());
+        LOGGER.error("发生错误的原因：{}", e.getMessage());
+        LOGGER.error("异常链为   ", e.getCause());
         e.printStackTrace();
         return R.fail(RCodeEnum.FAIL);
     }

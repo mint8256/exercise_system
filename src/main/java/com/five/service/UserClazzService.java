@@ -21,6 +21,7 @@ public interface UserClazzService extends IService<UserClazz> {
      */
     List<UserClazz> getListByUserId(Long userId);
 
+
     /**
      * 根据用户id获取其班级信息
      *
