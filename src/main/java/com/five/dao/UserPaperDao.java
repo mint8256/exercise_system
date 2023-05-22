@@ -31,5 +31,11 @@ public interface UserPaperDao extends BaseMapper<UserPaper> {
      */
     int insertOrUpdateBatch(@Param("entities") List<UserPaper> entities);
 
+    /**
+     * 根据试卷id删除用户做题信息
+     * @param paperId 试卷id
+     */
+    void deleteByPaperId(@Param("paperId")Long paperId);
+
 }
 

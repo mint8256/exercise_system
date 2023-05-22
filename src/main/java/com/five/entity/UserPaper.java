@@ -1,6 +1,8 @@
 package com.five.entity;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +22,7 @@ import java.time.LocalDateTime;
 @ToString
 public class UserPaper {
     //id
+    @TableId(type = IdType.AUTO)
     private Long id;
     //用户id
     private Long userId;
@@ -39,7 +42,7 @@ public class UserPaper {
     private Double userScore;
     //试卷总分
     private Double paperScore;
-    //试卷类型：（0：未完成，1：已完成）
+    //试卷类型：（0：未开始，1：未完成，2：已做成，3：已批改）
     private Integer status;
 }
 

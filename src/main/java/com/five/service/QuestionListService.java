@@ -24,5 +24,15 @@ public interface QuestionListService extends IService<QuestionList> {
      * 获取这个老师的全部题目列表
      */
     List<QuestionList> getAll();
+
+    /**
+     * 删除试题列表
+     */
+    void delete(Long questionListId);
+
+    /**
+     * 获取下一个题目列表序号
+     */
+    Integer getNextQuestionListNumber();
 }
 

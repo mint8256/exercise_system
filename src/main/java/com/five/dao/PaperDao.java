@@ -31,5 +31,12 @@ public interface PaperDao extends BaseMapper<Paper> {
      */
     int insertOrUpdateBatch(@Param("entities") List<Paper> entities);
 
+
+    /**
+     * 根据试题列表id删除试卷
+     * @param questionListId 试题列表id
+     */
+    void deleteByQuestionListId(@Param("questionListId") Long questionListId);
+
 }
 

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @description 算式抽象模型
  */
-public class Question {
+public class Arithmetic {
 
     /**
      * 操作数集合
@@ -29,9 +29,9 @@ public class Question {
      */
     private Integer answer;
 
-    public Question(){}
+    public Arithmetic(){}
 
-    public Question(List<Integer> operateNums,List<OperationEnum> operateSymbols){
+    public Arithmetic(List<Integer> operateNums, List<OperationEnum> operateSymbols){
         this.operateNums = operateNums;
         this.operateSymbols = operateSymbols;
     }

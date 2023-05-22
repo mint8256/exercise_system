@@ -4,8 +4,10 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.five.dao.ClazzDao;
+import com.five.dao.UserClazzDao;
 import com.five.dao.UserDao;
 import com.five.entity.*;
+import com.five.enums.RoleEnum;
 import com.five.service.ClazzService;
 import com.five.service.PaperClazzService;
 import com.five.service.UserClazzService;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,18 +46,25 @@ public class ClazzServiceImpl extends ServiceImpl<ClazzDao, Clazz> implements Cl
     private UserDao userDao;
     @Resource
     private MapperFacade mapperFacade;
+    @Resource
+    private UserClazzDao userClazzDao;
 
     @Override
-    public List<ClazzVo> getClazzList() {
+    public List<ClazzVo> getClazzVoList() {
 
+        List<Clazz> clazzList = getClazzList();
+
+        return clazzList.stream().map(this::clazzToVo).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Clazz> getClazzList() {
         Long userId = AuthUserContext.userId();
 
         List<UserClazz> userClazzList = userClazzService.getListByUserId(userId);
         Set<Long> ids = userClazzList.stream().map(UserClazz::getClazzId).collect(Collectors.toSet());
 
-        List<Clazz> clazzList = this.listByIds(ids);
-
-        return clazzList.stream().map(this::clazzToVo).collect(Collectors.toList());
+        return this.listByIds(ids);
     }
 
     @Override
@@ -62,9 +72,12 @@ public class ClazzServiceImpl extends ServiceImpl<ClazzDao, Clazz> implements Cl
 
         List<UserClazz> userClazzList = userClazzService.getListByClazzId(clazzId);
 
+        // 此时是包含，教师的
         Set<Long> userIds = userClazzList.stream().map(UserClazz::getUserId).collect(Collectors.toSet());
 
         List<User> users = userDao.selectBatchIds(userIds);
+        // 过滤掉老师
+        users = users.stream().filter((u) -> u.getRole().equals(RoleEnum.STUDENT.value())).collect(Collectors.toList());
 
         return users.stream().map(SpringContextUtil.getBean(UserServiceImpl.class)::userToVo).collect(Collectors.toList());
     }
@@ -81,13 +94,16 @@ public class ClazzServiceImpl extends ServiceImpl<ClazzDao, Clazz> implements Cl
 
     @Override
     public boolean checkIsExist(String clazzName) {
+        return this.getClazzByName(clazzName) != null;
+    }
+
+    @Override
+    public Clazz getClazzByName(String clazzName) {
 
         LambdaQueryWrapper<Clazz> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Clazz::getClazzName, StrUtil.trim(clazzName));
 
-        List<Clazz> clazzList = clazzDao.selectList(queryWrapper);
-
-        return clazzList != null && !clazzList.isEmpty();
+        return clazzDao.selectOne(queryWrapper);
     }
 
     @Override
@@ -99,14 +115,25 @@ public class ClazzServiceImpl extends ServiceImpl<ClazzDao, Clazz> implements Cl
 
         School school = SpringContextUtil.getBean(UserServiceImpl.class).getSchoolByUserId(userId);
         clazz.setSchoolId(school.getSchoolId());
+        // 注意此处的grade应该是123456年级，需要转化为2020这种形式
+        Integer grade = clazz.getGrade();
+        Integer level = LocalDateTime.now().getYear() - grade;
 
-        Integer clazzNumber = this.nextClazzNumber(clazz.getGrade());
+        clazz.setGrade(level);
+
+        Integer clazzNumber = this.nextClazzNumber(level);
         clazz.setClassNumber(clazzNumber);
 
         String clazzIdentifier = IdentifierGenerator.genClazzIdentifier(clazz);
         clazz.setClazzIdentifier(clazzIdentifier);
 
         clazzDao.insert(clazz);
+
+        // 还要记得要增加班级关联信息
+        UserClazz userClazz = new UserClazz();
+        userClazz.setClazzId(clazz.getClazzId());
+        userClazz.setUserId(userId);
+        userClazzDao.insert(userClazz);
     }
 
     @Override

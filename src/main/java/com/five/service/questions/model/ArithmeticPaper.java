@@ -10,7 +10,7 @@ public class ArithmeticPaper {
 
 
 
-    public void setArithmetics(List<Question> arithmetics) {
+    public void setArithmetics(List<Arithmetic> arithmetics) {
         this.arithmetics = arithmetics;
     }
 
@@ -18,12 +18,12 @@ public class ArithmeticPaper {
     /**
      * 题目列表
      */
-    private List<Question> arithmetics;
+    private List<Arithmetic> arithmetics;
 
 
     public ArithmeticPaper(){}
 
-    public List<Question> getArithmetics() {
+    public List<Arithmetic> getArithmetics() {
         return arithmetics;
     }
 
