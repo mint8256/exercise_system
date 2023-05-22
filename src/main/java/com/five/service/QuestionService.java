@@ -6,7 +6,7 @@ import com.five.entity.Question;
 import java.util.List;
 
 /**
- * (Question)表服务接口
+ * (Arithmetic)表服务接口
  *
  * @author fly
  * @since 2023-05-09 15:38:13

@@ -3,8 +3,8 @@ package com.five.service.questions.paper;
 
 import com.five.enums.FormulaLimitEnum;
 import com.five.service.questions.chain.*;
+import com.five.service.questions.model.Arithmetic;
 import com.five.service.questions.model.ArithmeticPaper;
-import com.five.service.questions.model.Question;
 import com.five.service.questions.model.QuestionParameterLimit;
 import com.five.service.questions.question.QuestionGenerator;
 
@@ -36,14 +36,14 @@ public abstract class AbstractPaperGenerator implements PaperGenerator {
         initMap();
         // 新建试卷
         ArithmeticPaper arithmeticPaper = new ArithmeticPaper();
-        List<Question> questions = new ArrayList<>();
-        arithmeticPaper.setArithmetics(questions);
+        List<Arithmetic> arithmetics = new ArrayList<>();
+        arithmeticPaper.setArithmetics(arithmetics);
         // 获取一个执行链
         AbstractExecute execute = initExecuteChain(arithmeticPaper,formulaLimits,questionParameterLimit);
-        return doGenerator(execute,arithmeticPaper);
+        return doGenerator(execute,arithmeticPaper,questionParameterLimit);
     }
 
-    protected abstract ArithmeticPaper doGenerator(AbstractExecute executeChain,ArithmeticPaper arithmeticPaper);
+    protected abstract ArithmeticPaper doGenerator(AbstractExecute executeChain,ArithmeticPaper arithmeticPaper,QuestionParameterLimit questionParameterLimit);
 
     /**
      * 初始化Map
@@ -88,10 +88,10 @@ public abstract class AbstractPaperGenerator implements PaperGenerator {
     /**
      * 将合法的算式放入算式列表中
      * @param arithmeticPaper 试卷
-     * @param question 问题
+     * @param arithmetic 问题
      */
-    protected void putLegalQuestion(ArithmeticPaper arithmeticPaper,Question question){
-        arithmeticPaper.getArithmetics().add(question);
+    protected void putLegalQuestion(ArithmeticPaper arithmeticPaper, Arithmetic arithmetic){
+        arithmeticPaper.getArithmetics().add(arithmetic);
     }
 
 }
