@@ -7,7 +7,9 @@ import com.five.dao.QuestionDao;
 import com.five.dao.QuestionListDao;
 import com.five.entity.QuestionList;
 import com.five.service.QuestionListService;
+import com.five.service.UserService;
 import com.five.util.AuthUserContext;
+import com.five.util.IdentifierGenerator;
 import com.five.util.SpringContextUtil;
 import org.springframework.stereotype.Service;
 
@@ -32,11 +34,25 @@ public class QuestionListServiceImpl extends ServiceImpl<QuestionListDao, Questi
     @Resource
     private PaperDao paperDao;
 
+    @Resource
+    private UserService userService;
+
     @Override
     public void genQuestionList(QuestionList questionList) {
 
         // TODO 根据题目列表属性生成需要的题目list
 
+        Long userId = AuthUserContext.userId();
+        Long schoolId = userService.getSchoolByUserId(userId).getSchoolId();
+
+        questionList.setUserId(userId);
+        questionList.setSchoolId(schoolId);
+        Integer nextQuestionListNumber = this.getNextQuestionListNumber();
+        questionList.setQuestionListNumber(nextQuestionListNumber);
+        String questionListIdentifier = IdentifierGenerator.genQuestionListIdentifier(schoolId, questionList.getGrade(), nextQuestionListNumber);
+        questionList.setQuestionListIdentifier(questionListIdentifier);
+
+        questionListDao.insert(questionList);
     }
 
     @Override
@@ -57,10 +73,23 @@ public class QuestionListServiceImpl extends ServiceImpl<QuestionListDao, Questi
         SpringContextUtil.getBean(QuestionServiceImpl.class).removeByQuestionListId(questionListId);
 
         //2. 然后删除题目列表对应试卷
-        // TODO 删除题目列表时是否要删除对应的试卷以及用户的做题记录以及对应的试卷班级关联信息？
+        //TODO 删除题目列表时是否要删除对应的试卷以及用户的做题记录以及对应的试卷班级关联信息？
 
         this.removeById(questionListId);
 
+    }
+
+    @Override
+    public Integer getNextQuestionListNumber() {
+
+        Long schoolId = userService.getSchoolByUserId(AuthUserContext.userId()).getSchoolId();
+
+        // 通过school获取其下一个试卷序号
+        LambdaQueryWrapper<QuestionList> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(QuestionList::getSchoolId, schoolId);
+
+        List<QuestionList> list = this.list(queryWrapper);
+        return list.size() + 1;
     }
 }
 

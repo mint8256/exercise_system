@@ -118,10 +118,8 @@ public class ExcelUserDataListener implements ReadListener<ExcelUser> {
             u.setSex(sex);
             u.setSignTime(LocalDateTime.now());
 
-            int level = LocalDateTime.now().getYear() - clazz.getGrade();
-
             String studentIdentifier = IdentifierGenerator
-                    .genStudentIdentifier(schoolId, level % 100, clazz.getClassNumber(), nextStuNumber.get());
+                    .genStudentIdentifier(schoolId, clazz.getGrade() % 100, clazz.getClassNumber(), nextStuNumber.get());
 
             u.setUserIdentifier(studentIdentifier);
             // 将编号+1

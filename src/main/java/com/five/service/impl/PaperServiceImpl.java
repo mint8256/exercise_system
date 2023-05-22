@@ -9,12 +9,15 @@ import com.five.entity.*;
 import com.five.enums.PaperStatusEnum;
 import com.five.service.*;
 import com.five.util.AuthUserContext;
+import com.five.util.IdentifierGenerator;
+import com.five.util.SpringContextUtil;
 import com.five.vo.PaperDetail;
 import com.five.vo.PaperVo;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -96,7 +99,6 @@ public class PaperServiceImpl extends ServiceImpl<PaperDao, Paper> implements Pa
 
         PaperDetail detail = mapperFacade.map(paperVo, PaperDetail.class);
 
-
         List<Question> questionList = questionService.getByQuestionListId(detail.getQuestionListId());
 
         detail.setQuestionList(questionList);
@@ -126,9 +128,19 @@ public class PaperServiceImpl extends ServiceImpl<PaperDao, Paper> implements Pa
 
         // 1. 保存试卷自己的信息
         Paper paper = mapperFacade.map(paperVo, Paper.class);
+        paper.setUserId(AuthUserContext.userId());
+        Long schoolId = SpringContextUtil.getBean(UserServiceImpl.class).getSchoolByUserId(AuthUserContext.userId()).getSchoolId();
         paper.setStatus(PaperStatusEnum.NOT_RELEASE.value());
         paper.setPaperScore(questionList.getScore());
         paper.setQuestionCount(questionList.getQuestionCount());
+
+        //计算并设置持续时间，单位：s
+        Duration between = Duration.between(paperVo.getStartTime(), paperVo.getEndTime());
+        long seconds = between.toSeconds();
+        paper.setDuration(seconds);
+
+        paper.setPaperIdentifier(IdentifierGenerator.genPaperIdentifier(paperVo.getPaperDifficulty(), schoolId,
+                questionList.getQuestionListNumber(), nextPaperNumber(questionListId)));
 
         paperDao.insert(paper);
 
@@ -163,6 +175,17 @@ public class PaperServiceImpl extends ServiceImpl<PaperDao, Paper> implements Pa
     @Override
     public boolean paperNameIsExist(String paperName) {
         return getByPaperName(paperName) != null;
+    }
+
+    @Override
+    public Integer nextPaperNumber(Long questionListId) {
+
+        LambdaQueryWrapper<Paper> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Paper::getQuestionListId, questionListId);
+
+        List<Paper> list = this.list(queryWrapper);
+
+        return list.size() + 1;
     }
 }
 

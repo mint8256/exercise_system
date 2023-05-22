@@ -36,7 +36,7 @@ public class QuestionList{
     private Integer resMin;
     //年级（如：2020）
     private Integer grade;
-    // 题目列表难度（简单，中等，困难）题目列表的难度等级粗略的认为对应难度的题目占比要 >= 60%
+    // 题目列表难度（简单，中等，困难）
     private String questionListDifficulty;
     //学校id
     private Long schoolId;

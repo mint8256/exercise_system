@@ -1,5 +1,6 @@
 package com.five.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.five.dao.UserQuestionDao;
 import com.five.entity.Question;
@@ -43,6 +44,15 @@ public class UserQuestionServiceImpl extends ServiceImpl<UserQuestionDao, UserQu
 
         }));
 
+    }
+
+    @Override
+    public List<UserQuestion> getByUserPaperId(Long userPaperId) {
+
+        LambdaQueryWrapper<UserQuestion> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserQuestion::getUserPaperId, userPaperId);
+
+        return this.list(queryWrapper);
     }
 }
 

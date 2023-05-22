@@ -13,4 +13,5 @@ public class UserPaperQuery extends BaseQuery {
 
     private String paperName;
     private String clazzName;
+    private String studentName;
 }

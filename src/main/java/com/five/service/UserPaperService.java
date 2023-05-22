@@ -5,6 +5,7 @@ import com.five.entity.Paper;
 import com.five.entity.UserPaper;
 import com.five.query.UserPaperQuery;
 import com.five.vo.MyPage;
+import com.five.vo.UserPaperDetail;
 
 import java.util.List;
 
@@ -35,5 +36,14 @@ public interface UserPaperService extends IService<UserPaper> {
      */
     MyPage<List<UserPaper>> getUserPaperList(UserPaperQuery userPaperQuery);
 
+    /**
+     * 获取用户试卷详情
+     */
+    UserPaperDetail getUserPaperDetail(Long userPaperId);
+
+    /**
+     * 根据试卷id和userIds获取试卷列表
+     */
+    List<UserPaper> getUserPaperList(Long paperId,List<Long> userIds);
 }
 

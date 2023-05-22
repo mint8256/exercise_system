@@ -22,6 +22,7 @@ public interface PaperService extends IService<Paper> {
 
     /**
      * 删除试卷
+     *
      * @param paperId 试卷id
      */
     void deletePaper(Long paperId);
@@ -37,12 +38,14 @@ public interface PaperService extends IService<Paper> {
 
     /**
      * 保存试卷信息
+     *
      * @param paperVo 试卷信息（包括关联的班级）
      */
     void savePaper(PaperVo paperVo);
 
     /**
      * 更改试卷的状态，由未发布转换为发布
+     *
      * @param paperId 试卷id
      */
     void updateStatus(Long paperId);
@@ -51,9 +54,15 @@ public interface PaperService extends IService<Paper> {
      * 判断试卷名称是否已经存在
      */
     Paper getByPaperName(String paperName);
+
     /**
      * 判断试卷名称是否已经存在
      */
     boolean paperNameIsExist(String paperName);
+
+    /**
+     * 获取试卷的下一个序号
+     */
+    Integer nextPaperNumber(Long questionListId);
 }
 

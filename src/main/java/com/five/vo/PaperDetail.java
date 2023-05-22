@@ -28,8 +28,8 @@ public class PaperDetail {
     private LocalDateTime startTime;
     //结束时间
     private LocalDateTime endTime;
-    //持续时间
-    private LocalDateTime duration;
+    //持续时间(单位：s)
+    private Long duration;
     //题目列表id（来源于哪个题目列表）
     private Long questionListId;
     //题目数量

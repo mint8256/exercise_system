@@ -42,7 +42,6 @@ public class PaperVo {
     // 试卷类型
     private Integer paperType;
     //创建时间
-    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime signTime;
     //发布人id
     private Long userId;
