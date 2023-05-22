@@ -8,8 +8,10 @@ import com.five.query.UserPaperQuery;
 import com.five.service.UserPaperService;
 import com.five.vo.MyPage;
 import com.five.vo.R;
+import com.five.vo.UserPaperDetail;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,5 +43,15 @@ public class UserPaperController {
 
         return R.success(myPage);
     }
+
+    @AuthVerify(roles = {RoleEnum.STUDENT, RoleEnum.TEACHER})
+    @GetMapping("/{userPaperId}")
+    public R<UserPaperDetail> getUserPaperDetail(@PathVariable("userPaperId") Long userPaperId) {
+
+        UserPaperDetail userPaperDetail = userPaperService.getUserPaperDetail(userPaperId);
+
+        return R.success(userPaperDetail);
+    }
+
 
 }

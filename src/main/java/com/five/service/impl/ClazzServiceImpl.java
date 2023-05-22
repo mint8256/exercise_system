@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -114,8 +115,13 @@ public class ClazzServiceImpl extends ServiceImpl<ClazzDao, Clazz> implements Cl
 
         School school = SpringContextUtil.getBean(UserServiceImpl.class).getSchoolByUserId(userId);
         clazz.setSchoolId(school.getSchoolId());
+        // 注意此处的grade应该是123456年级，需要转化为2020这种形式
+        Integer grade = clazz.getGrade();
+        Integer level = LocalDateTime.now().getYear() - grade;
 
-        Integer clazzNumber = this.nextClazzNumber(clazz.getGrade());
+        clazz.setGrade(level);
+
+        Integer clazzNumber = this.nextClazzNumber(level);
         clazz.setClassNumber(clazzNumber);
 
         String clazzIdentifier = IdentifierGenerator.genClazzIdentifier(clazz);
@@ -128,7 +134,6 @@ public class ClazzServiceImpl extends ServiceImpl<ClazzDao, Clazz> implements Cl
         userClazz.setClazzId(clazz.getClazzId());
         userClazz.setUserId(userId);
         userClazzDao.insert(userClazz);
-
     }
 
     @Override

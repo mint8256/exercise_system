@@ -1,8 +1,6 @@
 package com.five.entity;
 
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +17,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class UserQuestion {
-    @TableId(type = IdType.AUTO)
     private Long id;
     //对用用户做过的试卷对应
     private Long userPaperId;

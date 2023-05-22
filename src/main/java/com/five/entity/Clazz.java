@@ -29,6 +29,7 @@ public class Clazz {
     //班级名称
     private String clazzName;
     //年级（如：2020）
+    // 添加班级时，此处应该是123456年级，
     private Integer grade;
     //班级序号
     private Integer classNumber;
