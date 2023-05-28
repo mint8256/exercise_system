@@ -49,5 +49,19 @@
         where paper_id = #{paperId};
     </delete>
 
+    <update id="updatePaperStatus" parameterType="com.five.entity.UserPaper">
+        update exercise_system.user_paper
+        <set>
+            <if test="startTime != null">
+                start_time = #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="submitTime != null">
+                submit_time = #{submitTime,jdbcType=TIMESTAMP},
+            </if>
+            status_id = #{status,jdbcType=INTEGER}
+        </set>
+        where user_id = #{userId} and paper_id = #{paperId};
+
+    </update>
 </mapper>
 

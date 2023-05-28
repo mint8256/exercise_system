@@ -1,14 +1,18 @@
 package com.five.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.five.dao.UserPaperDao;
+import com.five.dao.*;
 import com.five.entity.*;
 import com.five.enums.RoleEnum;
 import com.five.enums.UserPaperStatusEnum;
 import com.five.exception.BaseException;
+import com.five.query.BaseQuery;
 import com.five.query.UserPaperQuery;
 import com.five.service.*;
 import com.five.util.AuthUserContext;
@@ -18,12 +22,17 @@ import com.five.vo.MyPage;
 import com.five.vo.RCodeEnum;
 import com.five.vo.UserPaperDetail;
 import ma.glasnost.orika.MapperFacade;
+import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -34,10 +43,21 @@ import java.util.stream.Collectors;
  * @since 2023-05-09 15:46:16
  */
 @Service("userPaperService")
+
 public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> implements UserPaperService {
 
     @Resource
     private UserPaperDao userPaperDao;
+
+    @Resource
+    private QuestionService questionService;
+
+    @Resource
+    private UserQuestionDao userQuestionDao;
+
+    @Resource
+    private PaperDao paperDao;
+
     @Resource
     private PaperClazzService paperClazzService;
     @Resource
@@ -176,6 +196,99 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
                 .in(UserPaper::getUserId, userIds);
 
         return this.list(queryWrapper);
+    }
+
+    @Override
+    public MyPage<List<UserPaper>> getPaperList(UserPaperQuery userPaperQuery) {
+        Long userId = AuthUserContext.userId();
+        LambdaQueryWrapper<UserPaper> paperQuery = new LambdaQueryWrapper<>();
+        paperQuery.eq(UserPaper::getUserId,userId);
+        if (!UserPaperStatusEnum.ALL.getValue().equals(userPaperQuery.getStatus())){
+            paperQuery.eq(UserPaper::getStatus,userPaperQuery.getStatus());
+        }
+        Page<UserPaper> queryPage = new Page<>();
+        queryPage.setCurrent(userPaperQuery.getPage());
+        queryPage.setSize(userPaperQuery.getSize());
+        Page<UserPaper> userPaperPage = userPaperDao.selectPage(queryPage, paperQuery);
+        MyPage<List<UserPaper>> userPaperListPage = new MyPage<>();
+        userPaperListPage.setData(userPaperPage.getRecords());
+        userPaperListPage.setTotal((int)userPaperPage.getTotal());
+        return userPaperListPage;
+    }
+
+    @Override
+    public Integer getUserPaperRemaining(Long paperId) {
+        LambdaQueryWrapper<UserPaper> userPaperQuery = new LambdaQueryWrapper<>();
+        userPaperQuery.eq(UserPaper::getPaperId,paperId)
+                .eq(UserPaper::getUserId,AuthUserContext.userId());
+        UserPaper userPaper = this.getOne(userPaperQuery);
+        return LocalDateTime.now().getSecond() - userPaper.getStartTime().getSecond();
+    }
+
+    @Override
+    public void startExam(Long paperId) {
+        // 设置考试开始时间和是更改学生的考试状态。
+        LocalDateTime now = LocalDateTime.now();
+        UserPaper userPaper = new UserPaper();
+        userPaper.setUserId(AuthUserContext.userId());
+        userPaper.setPaperId(paperId);
+        userPaper.setStartTime(now);
+        userPaper.setStatus(UserPaperStatusEnum.NOT_WRITTEN.getValue());
+        userPaperDao.updatePaperStatus(userPaper);
+    }
+
+    @Override
+    @Transactional
+    public void submitPaper(Long paperId) {
+        // 更改试卷提交时间
+        UserPaper userPaper = new UserPaper();
+        userPaper.setUserId(AuthUserContext.userId());
+        userPaper.setPaperId(paperId);
+        LocalDateTime now = LocalDateTime.now();
+        userPaper.setSubmitTime(now);
+        userPaper.setStatus(UserPaperStatusEnum.COMPLETED.getValue());
+        userPaperDao.updatePaperStatus(userPaper);
+        // 为用户的题目判分
+        // 先获取该题目列表的数据
+        Paper paper = paperDao.selectById(paperId);
+        LambdaQueryWrapper<Question> questionQuery = new LambdaQueryWrapper<>();
+        questionQuery.eq(Question::getQuestionListId,paper.getQuestionListId());
+        List<Question> questions = questionService.list(questionQuery);
+        // 获取用户作答的题目列表的数据
+        LambdaQueryWrapper<UserPaper> userPaperQuery = new LambdaQueryWrapper<>();
+        userPaperQuery.eq(UserPaper::getUserId,AuthUserContext.userId())
+                .eq(UserPaper::getPaperId,paperId);
+        UserPaper up = this.getOne(userPaperQuery);
+        LambdaQueryWrapper<UserQuestion> userQuestionQuery = new LambdaQueryWrapper<>();
+        userQuestionQuery.eq(UserQuestion::getUserPaperId,up.getId())
+                        .eq(UserQuestion::getPaperId,paperId);
+        List<UserQuestion> userQuestions = userQuestionService.list(userQuestionQuery);
+        // 将用户作答和正确的进行比较判分
+        for (UserQuestion userQuestion : userQuestions) {
+            for (Question question : questions) {
+                if (userQuestion.getQuestionId().equals(question.getQuestionId())){
+                    // 比较判分
+                    if (question.getQuestionAnswer().equals(userQuestion.getUserAnswer().trim())){
+                        userQuestion.setUserScore(question.getScore());
+                    }
+                    break;
+                }
+            }
+        }
+        // 将判题后的数据保存至数据库中
+        userQuestionService.updateBatchById(userQuestions);
+    }
+
+    @Override
+    public void submitQuestion(UserQuestion userQuestion) {
+        // 获取userPaperId
+        LambdaQueryWrapper<UserPaper> userPaperQuery = new LambdaQueryWrapper<>();
+        userPaperQuery.eq(UserPaper::getPaperId,userQuestion.getPaperId())
+                .eq(UserPaper::getUserId,AuthUserContext.userId());
+        UserPaper userPaper = this.getOne(userPaperQuery);
+        userQuestion.setPaperId(userPaper.getPaperId());
+        // 这里不做额外处理，直接提交，不判分
+        userQuestionDao.updateUserQuestion(userQuestion);
     }
 }
 
