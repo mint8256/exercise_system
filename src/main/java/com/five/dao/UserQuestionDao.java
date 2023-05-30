@@ -31,5 +31,11 @@ public interface UserQuestionDao extends BaseMapper<UserQuestion> {
      */
     int insertOrUpdateBatch(@Param("entities") List<UserQuestion> entities);
 
+    /**
+     * 更新用户题目
+     * @param userQuestion 用户题目作答情况
+     */
+    void updateUserQuestion(UserQuestion userQuestion);
+
 }
 

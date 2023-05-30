@@ -37,5 +37,11 @@ public interface UserPaperDao extends BaseMapper<UserPaper> {
      */
     void deleteByPaperId(@Param("paperId")Long paperId);
 
+    /**
+     * 根据学生id和试卷id更新用户对应的试卷的状态。
+     * @param userPaper
+     */
+    void updatePaperStatus(UserPaper userPaper);
+
 }
 

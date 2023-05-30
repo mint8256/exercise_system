@@ -10,6 +10,7 @@ import lombok.Getter;
  */
 
 public enum UserPaperStatusEnum {
+    ALL(-1,"全部"),
     NOT_STARTED(0, "未开始"),
     NOT_WRITTEN(1, "已经开始，但是学生还没有做"),
     UNCORRECTED(2, "学生已经做完，但是还没有批改"),
@@ -24,7 +25,7 @@ public enum UserPaperStatusEnum {
         this.desc = desc;
     }
 
-    public Integer value() {
+    public Integer getValue() {
         return this.value;
     }
 }
