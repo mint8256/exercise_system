@@ -37,5 +37,17 @@
         values(status),question_score=values(question_score)
     </insert>
 
+    <update id="updateUserQuestion" parameterType="com.five.entity.UserQuestion">
+        update exercise_system.user_question
+        <set>
+            user_answer = #{userAnswer,jdbcType=VARCHAR}
+        </set>
+        where
+            paper_id = #{paperId,jdbcType=BIGINT}
+        and
+            question_id = #{questionId,jdbcType=BIGINT}
+        and
+            user_paper_id = #{userPaperId,jdbcType=BIGINTr}
+    </update>
 </mapper>
 

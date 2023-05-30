@@ -30,4 +30,6 @@ logging:
           debug
 
 springdoc:
+  api-docs:
+    enabled: true
   packages-to-scan: com.five

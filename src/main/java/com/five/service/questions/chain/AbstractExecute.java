@@ -1,9 +1,9 @@
 package com.five.service.questions.chain;
 
 
+import com.five.service.questions.model.Arithmetic;
 import com.five.service.questions.model.ArithmeticPaper;
 import com.five.service.questions.model.ExecuteResult;
-import com.five.service.questions.model.Question;
 import com.five.service.questions.model.QuestionParameterLimit;
 
 /**
@@ -30,5 +30,5 @@ public abstract class AbstractExecute {
     }
 
 
-    public abstract ExecuteResult execute(Question question);
+    public abstract ExecuteResult execute(Arithmetic arithmetic);
 }
