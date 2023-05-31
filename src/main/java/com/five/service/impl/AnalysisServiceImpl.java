@@ -51,7 +51,7 @@ public class AnalysisServiceImpl implements AnalysisService {
             //3. 根据user和paperId找到每个班的做的试卷,要过滤，只取已做完的
             List<UserPaper> userPaperList = userPaperService.getUserPaperList(paperId, userIds);
             //排序后的分数列表
-            List<Double> scoreList = userPaperList.stream().filter(up -> up.getStatus() >= UserPaperStatusEnum.UNCORRECTED.value()).map(UserPaper::getUserScore).sorted().collect(Collectors.toList());
+            List<Double> scoreList = userPaperList.stream().filter(up -> up.getStatus() >= UserPaperStatusEnum.UNCORRECTED.getValue()).map(UserPaper::getUserScore).sorted().collect(Collectors.toList());
             //4. 计算每个班的最高分、最低分、平均分、全部成绩、总人数
             //4.1 最高分
             Double maxScore = 0.0;

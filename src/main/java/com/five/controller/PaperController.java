@@ -27,7 +27,7 @@ public class PaperController {
     private PaperService paperService;
 
     @Operation(summary = "根据试卷id获取试卷详情")
-    @AuthVerify(roles = RoleEnum.TEACHER)
+    @AuthVerify(roles = {RoleEnum.TEACHER,RoleEnum.STUDENT})
     @GetMapping("{paperId}")
     public R<PaperDetail> getSelf(@PathVariable("paperId") Long paperId) {
         Paper paper = paperService.getById(paperId);

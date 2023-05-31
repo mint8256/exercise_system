@@ -15,6 +15,7 @@ import com.five.vo.PaperDetail;
 import com.five.vo.PaperVo;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.Duration;
@@ -121,6 +122,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperDao, Paper> implements Pa
     }
 
     @Override
+    @Transactional
     public void savePaper(PaperVo paperVo) {
 
         Long questionListId = paperVo.getQuestionListId();

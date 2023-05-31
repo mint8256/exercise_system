@@ -2,6 +2,7 @@ package com.five.entity;
 
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,6 +26,7 @@ public class Question{
     //题目列表id
     private Long questionListId;
     //题目序号
+    @TableField("`order`")
     private Integer order;
     //题干
     private String stem;

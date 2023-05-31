@@ -49,6 +49,7 @@ public class UserPaperController {
      */
     @Operation(summary = "学生获取自己的试卷列表")
     @GetMapping("/userPaper")
+    @AuthVerify(roles = {RoleEnum.STUDENT})
     public R<MyPage<List<UserPaper>>> getPaperList(UserPaperQuery baseQuery){
 
         return R.success(userPaperService.getPaperList(baseQuery));
