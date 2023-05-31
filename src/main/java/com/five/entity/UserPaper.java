@@ -34,6 +34,10 @@ public class UserPaper {
     private LocalDateTime startTime;
     //提交时间
     private LocalDateTime submitTime;
+    // 试卷截止时间
+    private LocalDateTime endTime;
+    // 持续时间
+    private Long duration;
     //用户做对的题目数量
     private Integer questionCorrect;
     //试卷题目总数
@@ -44,5 +48,8 @@ public class UserPaper {
     private Double paperScore;
     //试卷类型：（0：未开始，1：未完成，2：已做成，3：已批改）
     private Integer status;
+    // 试卷类型（0：练习；1：限时卷）
+    private Integer paperType;
+    private String paperDifficulty;
 }
 

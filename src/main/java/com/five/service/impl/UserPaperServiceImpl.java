@@ -101,6 +101,10 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
                 userPaper.setPaperName(paper.getPaperName());
                 userPaper.setQuestionCount(paper.getQuestionCount());
                 userPaper.setPaperScore(paper.getPaperScore());
+                userPaper.setPaperType(paper.getPaperType());
+                userPaper.setEndTime(paper.getEndTime());
+                userPaper.setPaperDifficulty(paper.getPaperDifficulty());
+                userPaper.setDuration(paper.getDuration());
                 userPaper.setStatus(0);
                 return userPaper;
             }).collect(Collectors.toList());

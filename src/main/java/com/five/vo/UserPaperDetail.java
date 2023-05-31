@@ -27,6 +27,9 @@ public class UserPaperDetail {
     private LocalDateTime startTime;
     //提交时间
     private LocalDateTime submitTime;
+    //
+    private LocalDateTime endTime;
+
     //持续时间(单位：s)
     private Long duration;
     //用户做对的题目数量
