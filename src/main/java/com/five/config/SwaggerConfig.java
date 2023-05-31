@@ -1,8 +1,6 @@
 package com.five.config;
 
 import com.five.config.properties.SwaggerProperties;
-import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -12,7 +10,6 @@ import lombok.AllArgsConstructor;
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
 
 /**
  * description:
@@ -40,9 +37,9 @@ public class SwaggerConfig {
 
         OpenAPI openAPI = new OpenAPI().info(info());
         // oauth2.0 password
-        openAPI.schemaRequirement(HttpHeaders.AUTHORIZATION, this.securityScheme());
+        openAPI.schemaRequirement("token", this.securityScheme());
         //全局安全校验项
-        openAPI.addSecurityItem(new SecurityRequirement().addList(HttpHeaders.AUTHORIZATION));
+        openAPI.addSecurityItem(new SecurityRequirement().addList("token"));
         return openAPI;
     }
     private SecurityScheme securityScheme() {
@@ -50,7 +47,7 @@ public class SwaggerConfig {
         //类型
         securityScheme.setType(SecurityScheme.Type.APIKEY);
         //请求头的name
-        securityScheme.setName(HttpHeaders.AUTHORIZATION);
+        securityScheme.setName("token");
         //token所在位置
         securityScheme.setIn(SecurityScheme.In.HEADER);
         return securityScheme;
