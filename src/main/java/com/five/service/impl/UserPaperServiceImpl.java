@@ -78,6 +78,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
     }
 
     @Override
+    @Transactional
     public void createUserPaper(Paper paper) {
 
         Long paperId = paper.getPaperId();
@@ -94,6 +95,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
 
             List<UserPaper> userPaperList = userIds.stream().filter(userService::isStudent).map((userId) -> {
                 UserPaper userPaper = new UserPaper();
+                userPaper.setStartTime(paper.getStartTime());
                 userPaper.setUserId(userId);
                 userPaper.setPaperId(paperId);
                 userPaper.setPaperName(paper.getPaperName());
@@ -183,7 +185,9 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
         detail.setUserQuestionList(userQuestionList);
 
         //设置持续时间（单位：s）
-        detail.setDuration(Duration.between(userPaper.getStartTime(), userPaper.getSubmitTime()).toSeconds());
+        if (userPaper.getStartTime() != null && userPaper.getSubmitTime() != null){
+            detail.setDuration(Duration.between(userPaper.getStartTime(), userPaper.getSubmitTime()).toSeconds());
+        }
 
         return detail;
     }

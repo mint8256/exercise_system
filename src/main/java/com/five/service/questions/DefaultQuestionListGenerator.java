@@ -1,9 +1,9 @@
 package com.five.service.questions;
 
-import com.five.entity.Paper;
 import com.five.entity.Question;
 import com.five.entity.QuestionList;
 import com.five.enums.FormulaLimitEnum;
+import com.five.enums.QuestionDifficultyEnum;
 import com.five.service.questions.model.Arithmetic;
 import com.five.service.questions.model.ArithmeticPaper;
 import com.five.service.questions.model.CacheMapThreadLocal;
@@ -49,7 +49,7 @@ public class DefaultQuestionListGenerator implements QuestionListGenerator{
 
         // 直接对不同的题目类型进行不同的创建
         QuestionParameterLimit questionParameterLimit = new QuestionParameterLimit();
-        questionParameterLimit.setQuestionNum(questionList.getQuestionListNumber());
+        questionParameterLimit.setQuestionNum(questionList.getQuestionCount());
         questionParameterLimit.setMaxResultLimit(questionList.getResMax());
         questionParameterLimit.setMinResultLimit(questionList.getResMin());
 
@@ -61,11 +61,22 @@ public class DefaultQuestionListGenerator implements QuestionListGenerator{
         ArithmeticPaper arithmeticPaper = paperGenerator.generator(formulaLimitEnumList, questionParameterLimit);
         // 构造指定格式的题目列表并返回
         List<Question> generatorQuestions = new ArrayList<>();
-        for (Arithmetic arithmetic : arithmeticPaper.getArithmetics()){
+        for (int i = 0; i < arithmeticPaper.getArithmetics().size(); i++) {
+            Arithmetic arithmetic = arithmeticPaper.getArithmetics().get(i);
             Question question = new Question();
+            question.setOrder(i + 1);
             question.setQuestionAnswer(arithmetic.getAnswer().toString());
             question.setStem(arithmetic.toString());
             generatorQuestions.add(question);
+            // 设置分数
+            if (questionList.getType() < 3){
+                question.setScore(QuestionDifficultyEnum.A.getScore().doubleValue());
+            }else if(questionList.getType() >= 3 && questionList.getType() <  6) {
+                question.setScore(QuestionDifficultyEnum.B.getScore().doubleValue());
+            }else{
+                question.setScore(QuestionDifficultyEnum.C.getScore().doubleValue());
+
+            }
         }
         // 清除用于重复性检查的Map对应的ThreadLocal防止内存泄露.
         CacheMapThreadLocal.clear();

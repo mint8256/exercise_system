@@ -1,5 +1,8 @@
 package com.five.config;
 
+import com.five.entity.Paper;
+import com.five.vo.PaperDetail;
+import com.five.vo.PaperVo;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
@@ -10,9 +13,7 @@ import org.springframework.context.annotation.Configuration;
 public class OrikaConfig {
 
     @Bean
-    public MapperFactory mapperFactory(){
-        return new DefaultMapperFactory.Builder().build();
-    }
+    public MapperFactory mapperFactory(){return new DefaultMapperFactory.Builder().build();}
 
     @Bean
     public MapperFacade mapperFacade(){

@@ -36,10 +36,10 @@ class ExerciseSystemApplicationTests {
     void testQuestionListGenerator(){
         long start = System.currentTimeMillis();
         QuestionList questionList = new QuestionList();
-        questionList.setType(7);
+        questionList.setType(1);
         questionList.setResMin(20);
         questionList.setResMax(500);
-        questionList.setQuestionListNumber(100);
+        questionList.setQuestionCount(100);
         List<Question> gen = questionListGenerator.gen(questionList);
         System.out.println(gen.size());
         for (Question question : gen) {
