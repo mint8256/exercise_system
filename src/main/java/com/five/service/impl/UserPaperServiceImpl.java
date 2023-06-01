@@ -223,7 +223,11 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
         userPaperQuery.eq(UserPaper::getPaperId,paperId)
                 .eq(UserPaper::getUserId,AuthUserContext.userId());
         UserPaper userPaper = this.getOne(userPaperQuery);
-        return LocalDateTime.now().getSecond() - userPaper.getStartTime().getSecond();
+        if (userPaper.getStatus() < UserPaperStatusEnum.NOT_WRITTEN.getValue()){
+            return userPaper.getDuration().intValue();
+        }
+        Duration duration = Duration.between(LocalDateTime.now(),userPaper.getStartTime());
+        return (int) duration.toSeconds();
     }
 
     @Override
@@ -282,12 +286,6 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
 
     @Override
     public void submitQuestion(UserQuestion userQuestion) {
-        // 获取userPaperId
-        LambdaQueryWrapper<UserPaper> userPaperQuery = new LambdaQueryWrapper<>();
-        userPaperQuery.eq(UserPaper::getPaperId,userQuestion.getPaperId())
-                .eq(UserPaper::getUserId,AuthUserContext.userId());
-        UserPaper userPaper = this.getOne(userPaperQuery);
-        userQuestion.setPaperId(userPaper.getPaperId());
         // 这里不做额外处理，直接提交，不判分
         userQuestionDao.updateUserQuestion(userQuestion);
     }
