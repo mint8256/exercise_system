@@ -1,6 +1,5 @@
 package com.five.vo;
 
-import com.five.entity.UserQuestion;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -43,6 +42,6 @@ public class UserPaperDetail {
     //试卷类型：（0：未开始，1：未完成，2：已做成，3：已批改）
     private Integer status;
     //用户做题列表
-    private List<UserQuestion> userQuestionList;
+    private List<UserQuestionDetail> userQuestionList;
 
 }

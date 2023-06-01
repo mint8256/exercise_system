@@ -17,6 +17,7 @@ import com.five.util.TokenInfo;
 import com.five.vo.MyPage;
 import com.five.vo.RCodeEnum;
 import com.five.vo.UserPaperDetail;
+import com.five.vo.UserQuestionDetail;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -176,7 +177,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
 
         UserPaperDetail detail = mapperFacade.map(userPaper, UserPaperDetail.class);
 
-        List<UserQuestion> userQuestionList = userQuestionService.getByUserPaperId(userPaperId);
+        List<UserQuestionDetail> userQuestionList = userQuestionService.getByUserPaperId(userPaperId);
 
         detail.setUserQuestionList(userQuestionList);
 

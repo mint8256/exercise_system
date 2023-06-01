@@ -1,5 +1,6 @@
 package com.five.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.five.dao.UserQuestionDao;
@@ -8,6 +9,8 @@ import com.five.entity.UserQuestion;
 import com.five.enums.UserQuestionEnum;
 import com.five.service.QuestionService;
 import com.five.service.UserQuestionService;
+import com.five.vo.UserQuestionDetail;
+import ma.glasnost.orika.MapperFacade;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -26,6 +29,8 @@ public class UserQuestionServiceImpl extends ServiceImpl<UserQuestionDao, UserQu
     private QuestionService questionService;
     @Resource
     private UserQuestionDao userQuestionDao;
+    @Resource
+    private MapperFacade mapperFacade;
 
     @Override
     public void createUserQuestion(Long userPaperId, Long paperId, Long questionListId) {
@@ -47,12 +52,22 @@ public class UserQuestionServiceImpl extends ServiceImpl<UserQuestionDao, UserQu
     }
 
     @Override
-    public List<UserQuestion> getByUserPaperId(Long userPaperId) {
+    public List<UserQuestionDetail> getByUserPaperId(Long userPaperId) {
 
         LambdaQueryWrapper<UserQuestion> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(UserQuestion::getUserPaperId, userPaperId);
 
-        return this.list(queryWrapper);
+        List<UserQuestion> list = this.list(queryWrapper);
+
+        List<UserQuestionDetail> userQuestionDetails = mapperFacade.mapAsList(list, UserQuestionDetail.class);
+
+        for (UserQuestionDetail userQuestionDetail : userQuestionDetails) {
+            Long qid = userQuestionDetail.getQuestionId();
+            Question question = questionService.getById(qid);
+            BeanUtil.copyProperties(question,userQuestionDetail);
+        }
+
+        return userQuestionDetails;
     }
 }
 
