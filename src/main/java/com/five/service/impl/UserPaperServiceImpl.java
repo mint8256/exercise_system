@@ -1,10 +1,7 @@
 package com.five.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.five.dao.*;
@@ -12,7 +9,6 @@ import com.five.entity.*;
 import com.five.enums.RoleEnum;
 import com.five.enums.UserPaperStatusEnum;
 import com.five.exception.BaseException;
-import com.five.query.BaseQuery;
 import com.five.query.UserPaperQuery;
 import com.five.service.*;
 import com.five.util.AuthUserContext;
@@ -22,17 +18,13 @@ import com.five.vo.MyPage;
 import com.five.vo.RCodeEnum;
 import com.five.vo.UserPaperDetail;
 import ma.glasnost.orika.MapperFacade;
-import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -211,7 +203,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
         Long userId = AuthUserContext.userId();
         LambdaQueryWrapper<UserPaper> paperQuery = new LambdaQueryWrapper<>();
         paperQuery.eq(UserPaper::getUserId,userId);
-        if (!UserPaperStatusEnum.ALL.getValue().equals(userPaperQuery.getStatus())){
+        if (!UserPaperStatusEnum.ALL.value().equals(userPaperQuery.getStatus())){
             paperQuery.eq(UserPaper::getStatus,userPaperQuery.getStatus());
         }
         Page<UserPaper> queryPage = new Page<>();
@@ -241,7 +233,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
         userPaper.setUserId(AuthUserContext.userId());
         userPaper.setPaperId(paperId);
         userPaper.setStartTime(now);
-        userPaper.setStatus(UserPaperStatusEnum.NOT_WRITTEN.getValue());
+        userPaper.setStatus(UserPaperStatusEnum.NOT_WRITTEN.value());
         userPaperDao.updatePaperStatus(userPaper);
     }
 
@@ -254,7 +246,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
         userPaper.setPaperId(paperId);
         LocalDateTime now = LocalDateTime.now();
         userPaper.setSubmitTime(now);
-        userPaper.setStatus(UserPaperStatusEnum.COMPLETED.getValue());
+        userPaper.setStatus(UserPaperStatusEnum.COMPLETED.value());
         userPaperDao.updatePaperStatus(userPaper);
         // 为用户的题目判分
         // 先获取该题目列表的数据

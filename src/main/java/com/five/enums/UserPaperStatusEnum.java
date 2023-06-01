@@ -25,7 +25,7 @@ public enum UserPaperStatusEnum {
         this.desc = desc;
     }
 
-    public Integer getValue() {
+    public Integer value() {
         return this.value;
     }
 }
