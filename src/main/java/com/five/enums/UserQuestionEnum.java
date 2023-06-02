@@ -9,8 +9,8 @@ import lombok.Getter;
  * @since 2023/5/15 17:19
  */
 public enum UserQuestionEnum {
-    TRUE(0, "对了"),
-    FALSE(1, "错了"),
+    TRUE(1, "对了"),
+    FALSE(0, "错了"),
     NOT_WRITTEN(2, "未做"),
     ;
     private final Integer value;
