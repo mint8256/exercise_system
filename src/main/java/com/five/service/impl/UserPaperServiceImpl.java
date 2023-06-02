@@ -210,7 +210,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
         Long userId = AuthUserContext.userId();
         LambdaQueryWrapper<UserPaper> paperQuery = new LambdaQueryWrapper<>();
         paperQuery.eq(UserPaper::getUserId,userId);
-        if (!UserPaperStatusEnum.ALL.getValue().equals(userPaperQuery.getStatus())){
+        if (!UserPaperStatusEnum.ALL.value().equals(userPaperQuery.getStatus())){
             paperQuery.eq(UserPaper::getStatus,userPaperQuery.getStatus());
         }
         Page<UserPaper> queryPage = new Page<>();
@@ -229,7 +229,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
         userPaperQuery.eq(UserPaper::getPaperId,paperId)
                 .eq(UserPaper::getUserId,AuthUserContext.userId());
         UserPaper userPaper = this.getOne(userPaperQuery);
-        if (userPaper.getStatus() < UserPaperStatusEnum.NOT_WRITTEN.getValue()){
+        if (userPaper.getStatus() < UserPaperStatusEnum.NOT_WRITTEN.value()){
             return userPaper.getDuration().intValue();
         }
         Duration duration = Duration.between(LocalDateTime.now(),userPaper.getStartTime());
@@ -244,7 +244,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
         userPaper.setUserId(AuthUserContext.userId());
         userPaper.setPaperId(paperId);
         userPaper.setStartTime(now);
-        userPaper.setStatus(UserPaperStatusEnum.NOT_WRITTEN.getValue());
+        userPaper.setStatus(UserPaperStatusEnum.NOT_WRITTEN.value());
         userPaperDao.updatePaperStatus(userPaper);
     }
 
@@ -256,7 +256,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
                 .eq(UserPaper::getPaperId,paperId);
         UserPaper userPaper = this.getOne(userPaperQuery);
         // 更改试卷提交时间
-        if (UserPaperStatusEnum.COMPLETED.getValue().equals(userPaper.getStatus())) {
+        if (UserPaperStatusEnum.COMPLETED.value().equals(userPaper.getStatus())) {
             throw new BaseException(RCodeEnum.SUBMITTED);
         }
 
@@ -299,7 +299,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
         }
         LocalDateTime now = LocalDateTime.now();
         userPaper.setSubmitTime(now);
-        userPaper.setStatus(UserPaperStatusEnum.COMPLETED.getValue());
+        userPaper.setStatus(UserPaperStatusEnum.COMPLETED.value());
         userPaper.setQuestionCorrect(correct);
         userPaper.setUserScore(score);
         userPaperDao.updatePaperStatus(userPaper);
