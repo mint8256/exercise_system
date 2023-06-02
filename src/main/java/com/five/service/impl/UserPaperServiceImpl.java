@@ -255,18 +255,13 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
         LambdaQueryWrapper<UserPaper> userPaperQuery = new LambdaQueryWrapper<>();
         userPaperQuery.eq(UserPaper::getUserId,AuthUserContext.userId())
                 .eq(UserPaper::getPaperId,paperId);
-        UserPaper up = this.getOne(userPaperQuery);
+        UserPaper userPaper = this.getOne(userPaperQuery);
         // 更改试卷提交时间
-        if (UserPaperStatusEnum.COMPLETED.getValue().equals(up.getStatus())) {
+        if (UserPaperStatusEnum.COMPLETED.getValue().equals(userPaper.getStatus())) {
             throw new BaseException(RCodeEnum.SUBMITTED);
         }
-        UserPaper userPaper = new UserPaper();
-        userPaper.setUserId(AuthUserContext.userId());
-        userPaper.setPaperId(paperId);
-        LocalDateTime now = LocalDateTime.now();
-        userPaper.setSubmitTime(now);
-        userPaper.setStatus(UserPaperStatusEnum.COMPLETED.getValue());
-        userPaperDao.updatePaperStatus(userPaper);
+
+
         // 为用户的题目判分
         // 先获取该题目列表的数据
         Paper paper = paperDao.selectById(paperId);
@@ -276,13 +271,16 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
         // 获取用户作答的题目列表的数据
 
         LambdaQueryWrapper<UserQuestion> userQuestionQuery = new LambdaQueryWrapper<>();
-        userQuestionQuery.eq(UserQuestion::getUserPaperId,up.getId())
+        userQuestionQuery.eq(UserQuestion::getUserPaperId,userPaper.getId())
                         .eq(UserQuestion::getPaperId,paperId);
         List<UserQuestion> userQuestions = userQuestionService.list(userQuestionQuery);
+        int correct = 0;
+        double score = 0;
         // 将用户作答和正确的进行比较判分
         for (UserQuestion userQuestion : userQuestions) {
 
-            if (UserQuestionEnum.NOT_WRITTEN.value().equals(userQuestion.getStatus())){
+            if (UserQuestionEnum.NOT_WRITTEN.value().equals(userQuestion.getStatus())
+            || userQuestion.getUserAnswer() == null){
                userQuestion.setStatus(UserQuestionEnum.FALSE.value());
                continue;
             }
@@ -293,12 +291,19 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
                     if (question.getQuestionAnswer().equals(userQuestion.getUserAnswer().trim())){
                         userQuestion.setUserScore(question.getScore());
                         userQuestion.setStatus(UserQuestionEnum.TRUE.value());
+                        correct++;
+                        score += question.getScore();
                     }
                     break;
                 }
             }
-
         }
+        LocalDateTime now = LocalDateTime.now();
+        userPaper.setSubmitTime(now);
+        userPaper.setStatus(UserPaperStatusEnum.COMPLETED.getValue());
+        userPaper.setQuestionCorrect(correct);
+        userPaper.setUserScore(score);
+        userPaperDao.updatePaperStatus(userPaper);
         // 将判题后的数据保存至数据库中
         userQuestionService.updateBatchById(userQuestions);
     }
