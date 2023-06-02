@@ -58,6 +58,12 @@
             <if test="submitTime != null">
                 submit_time = #{submitTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="questionCorrect != null">
+                question_correct = #{questionCorrect,jdbcType=INTEGER},
+            </if>
+            <if test="userScore != null">
+                user_score = #{userScore,jdbcType=DOUBLE},
+            </if>
             status = #{status,jdbcType=INTEGER}
         </set>
         where user_id = #{userId} and paper_id = #{paperId};
