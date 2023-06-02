@@ -2,6 +2,7 @@ package com.five.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.five.entity.UserQuestion;
+import com.five.vo.UserQuestionDetail;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public interface UserQuestionService extends IService<UserQuestion> {
     /**
      * 根据用户试卷id获取其相关题目情况
      */
-    List<UserQuestion> getByUserPaperId(Long userPaperId);
+    List<UserQuestionDetail> getByUserPaperId(Long userPaperId);
 }
 
 
