@@ -1,9 +1,7 @@
 package com.five.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.five.dao.*;
@@ -21,6 +19,7 @@ import com.five.util.TokenInfo;
 import com.five.vo.MyPage;
 import com.five.vo.RCodeEnum;
 import com.five.vo.UserPaperDetail;
+import com.five.vo.UserQuestionDetail;
 import ma.glasnost.orika.MapperFacade;
 
 import org.springframework.stereotype.Service;
@@ -184,7 +183,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
 
         UserPaperDetail detail = mapperFacade.map(userPaper, UserPaperDetail.class);
 
-        List<UserQuestion> userQuestionList = userQuestionService.getByUserPaperId(userPaperId);
+        List<UserQuestionDetail> userQuestionList = userQuestionService.getByUserPaperId(userPaperId);
 
         detail.setUserQuestionList(userQuestionList);
 
