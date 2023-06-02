@@ -8,7 +8,9 @@ import com.five.dao.*;
 import com.five.entity.*;
 import com.five.enums.RoleEnum;
 import com.five.enums.UserPaperStatusEnum;
+import com.five.enums.UserQuestionEnum;
 import com.five.exception.BaseException;
+
 import com.five.query.UserPaperQuery;
 import com.five.service.*;
 import com.five.util.AuthUserContext;
@@ -19,13 +21,17 @@ import com.five.vo.RCodeEnum;
 import com.five.vo.UserPaperDetail;
 import com.five.vo.UserQuestionDetail;
 import ma.glasnost.orika.MapperFacade;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.Duration;
+
 import java.time.LocalDateTime;
+
 import java.util.List;
+
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -245,7 +251,14 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
     @Override
     @Transactional
     public void submitPaper(Long paperId) {
+        LambdaQueryWrapper<UserPaper> userPaperQuery = new LambdaQueryWrapper<>();
+        userPaperQuery.eq(UserPaper::getUserId,AuthUserContext.userId())
+                .eq(UserPaper::getPaperId,paperId);
+        UserPaper up = this.getOne(userPaperQuery);
         // 更改试卷提交时间
+        if (UserPaperStatusEnum.COMPLETED.getValue().equals(up.getStatus())) {
+            throw new BaseException(RCodeEnum.SUBMITTED);
+        }
         UserPaper userPaper = new UserPaper();
         userPaper.setUserId(AuthUserContext.userId());
         userPaper.setPaperId(paperId);
@@ -260,25 +273,30 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
         questionQuery.eq(Question::getQuestionListId,paper.getQuestionListId());
         List<Question> questions = questionService.list(questionQuery);
         // 获取用户作答的题目列表的数据
-        LambdaQueryWrapper<UserPaper> userPaperQuery = new LambdaQueryWrapper<>();
-        userPaperQuery.eq(UserPaper::getUserId,AuthUserContext.userId())
-                .eq(UserPaper::getPaperId,paperId);
-        UserPaper up = this.getOne(userPaperQuery);
+
         LambdaQueryWrapper<UserQuestion> userQuestionQuery = new LambdaQueryWrapper<>();
         userQuestionQuery.eq(UserQuestion::getUserPaperId,up.getId())
                         .eq(UserQuestion::getPaperId,paperId);
         List<UserQuestion> userQuestions = userQuestionService.list(userQuestionQuery);
         // 将用户作答和正确的进行比较判分
         for (UserQuestion userQuestion : userQuestions) {
+
+            if (UserQuestionEnum.NOT_WRITTEN.value().equals(userQuestion.getStatus())){
+               userQuestion.setStatus(UserQuestionEnum.FALSE.value());
+               continue;
+            }
             for (Question question : questions) {
                 if (userQuestion.getQuestionId().equals(question.getQuestionId())){
                     // 比较判分
+                    userQuestion.setStatus(UserQuestionEnum.FALSE.value());
                     if (question.getQuestionAnswer().equals(userQuestion.getUserAnswer().trim())){
                         userQuestion.setUserScore(question.getScore());
+                        userQuestion.setStatus(UserQuestionEnum.TRUE.value());
                     }
                     break;
                 }
             }
+
         }
         // 将判题后的数据保存至数据库中
         userQuestionService.updateBatchById(userQuestions);

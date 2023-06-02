@@ -153,16 +153,17 @@ public class PaperServiceImpl extends ServiceImpl<PaperDao, Paper> implements Pa
     }
 
     @Override
+    @Transactional
     public void updateStatus(Long paperId) {
 
+        Paper paper = paperDao.selectById(paperId);
+        if (PaperStatusEnum.RELEASED.value().equals(paper.getStatus())){
+            return;
+        }
         // 1. 更改试卷本身的状态
-        Paper paper = new Paper();
-        paper.setPaperId(paperId);
         paper.setStatus(PaperStatusEnum.RELEASED.value());
         paperDao.updateById(paper);
-
         // 2. 添加到学生的试题列表中，并设置状态为未开始
-        paper = paperDao.selectById(paperId);
         userPaperService.createUserPaper(paper);
 
     }

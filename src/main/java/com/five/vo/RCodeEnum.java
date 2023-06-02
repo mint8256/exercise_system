@@ -25,6 +25,8 @@ public enum RCodeEnum {
     TOKEN_NOT_EXIST(1010, "token 为空！"),
     USERNAME_IS_EXIST(1011, "用户名已经存在，换个用户名试试"),
     PAPER_NAME_IS_EXIST(1012, "试卷名称已经存在，换个试卷名试试"),
+    SUBMITTED(1013,"已经提交试卷，不可重复提交！"),
+
     ;
 
     private final Integer code;

@@ -22,7 +22,7 @@ import lombok.ToString;
 public class Question{
     //问题id
     @TableId(type = IdType.AUTO)
-    private Long questionId;
+    private  Long questionId;
     //题目列表id
     private Long questionListId;
     //题目序号
