@@ -58,7 +58,7 @@
             <if test="submitTime != null">
                 submit_time = #{submitTime,jdbcType=TIMESTAMP},
             </if>
-            status_id = #{status,jdbcType=INTEGER}
+            status = #{status,jdbcType=INTEGER}
         </set>
         where user_id = #{userId} and paper_id = #{paperId};
 
