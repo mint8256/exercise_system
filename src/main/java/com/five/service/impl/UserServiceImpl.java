@@ -168,7 +168,6 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
                     // 性别
                     .filter((vo) -> (userQuery.getSex() == null ) || (userQuery.getSex() != null
                             && Objects.equals(vo.getSex(), userQuery.getSex()))).collect(Collectors.toList());
-            System.out.println(voList);
             myPage.setTotal(voList.size());
             myPage.calTotalPage(voList.size(), userQuery.getSize());
 

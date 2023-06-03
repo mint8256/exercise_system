@@ -1,12 +1,20 @@
 package com.five.service.impl;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.five.dao.UserDao;
 import com.five.entity.*;
 import com.five.enums.UserPaperStatusEnum;
 import com.five.service.*;
 import com.five.vo.PaperAnalysis;
+import com.five.vo.PaperAnalysisFile;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +37,9 @@ public class AnalysisServiceImpl implements AnalysisService {
     private PaperService paperService;
     @Resource
     private ClazzService clazzService;
+
+    @Resource
+    private UserDao userDao;
     @Resource
     private UserPaperService userPaperService;
 
@@ -78,8 +89,59 @@ public class AnalysisServiceImpl implements AnalysisService {
             paperAnalysis.setE(countMap.get('E'));
 
             paperAnalysis.setTotal(scoreList.size());
+            paperAnalysList.add(paperAnalysis);
         }
         return paperAnalysList;
+    }
+
+    @Override
+    public Void paperDataFile(Long paperId, HttpServletResponse response) throws IOException {
+        //1. 根据试卷获取全部的班级信息
+        List<Long> clazzIds = paperClazzService.getListByPaperId(paperId).stream().map(PaperClazz::getClazzId).collect(Collectors.toList());
+        //2. 根据班级信息获取全部的学生
+        List<PaperAnalysis> paperAnalysList = new ArrayList<>();
+
+        Paper paper = paperService.getById(paperId);
+        System.out.println(paper);
+        // 方法3 如果写到不同的sheet 不同的对象
+        response.setHeader("Content-disposition", "attachment;filename=" + java.net.URLEncoder.encode(paper.getPaperName() +".xlsx","UTF-8"));
+        // 这里 指定文件
+        try (ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream()).build()) {
+            int point = 0;
+            for (Long clazzId : clazzIds) {
+                PaperAnalysis paperAnalysis = new PaperAnalysis();
+
+                Clazz clazz = clazzService.getById(clazzId);
+                paperAnalysis.setClazzName(clazz.getClazzName());
+                paperAnalysis.setPaperName(paper.getPaperName());
+
+                List<Long> userIds = userClazzService.getListByClazzId(clazzId).stream().map(UserClazz::getUserId).collect(Collectors.toList());
+
+                //3. 根据user和paperId找到每个班的做的试卷,要过滤，只取已做完的
+                List<UserPaper> userPaperList = userPaperService.getUserPaperList(paperId, userIds);
+                System.out.println(userPaperList);
+                List<PaperAnalysisFile> paperAnalysisFiles = new ArrayList<>();
+                for (UserPaper userPaper : userPaperList) {
+                    if (!userPaper.getStatus().equals(UserPaperStatusEnum.COMPLETED.value())){
+                        continue;
+                    }
+                    User user = userDao.selectById(userPaper.getUserId());
+                    PaperAnalysisFile analysisFile = new PaperAnalysisFile();
+                    analysisFile.setStudentNumber(user.getUsername());
+                    analysisFile.setCorrectNum(userPaper.getQuestionCorrect());
+                    analysisFile.setStudentName(user.getRealName());
+                    analysisFile.setScore(userPaper.getUserScore());
+                    analysisFile.setCorrectRatio(userPaper.getQuestionCorrect()*1.0/userPaper.getQuestionCount());
+                    paperAnalysisFiles.add(analysisFile);
+                }
+                WriteSheet writeSheet = EasyExcel.writerSheet(point, clazz.getClazzName()).head(PaperAnalysisFile.class).build();
+                // 分页去数据库查询数据 这里可以去数据库查询每一页的数据
+                excelWriter.write(paperAnalysisFiles, writeSheet);
+                point++;
+            }
+            excelWriter.finish();
+        }
+        return null;
     }
 
     private char getGrade(double score) {
