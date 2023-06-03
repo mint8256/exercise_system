@@ -35,8 +35,8 @@ public class QuestionListController {
     @Operation(summary = "获取全部题目列表")
     @AuthVerify(roles = RoleEnum.TEACHER)
     @GetMapping
-    public R<List<QuestionList>> getAll() {
-        List<QuestionList> list = questionListService.getAll();
+    public R<List<QuestionList>> getAll(@RequestParam(value = "type",defaultValue = "0") Integer type) {
+        List<QuestionList> list = questionListService.getAll(type);
         return R.success(list);
     }
 
