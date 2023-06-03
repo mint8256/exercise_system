@@ -44,6 +44,7 @@ public class QuestionList{
     private Integer questionListNumber;
     //题目列表编号
     private String questionListIdentifier;
+    private String questionListName;
     //创建时间
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime signTime;
