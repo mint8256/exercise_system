@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -33,5 +36,12 @@ public class AnalysisController {
         List<PaperAnalysis> list = analysisService.analysis(paperId);
 
         return R.success(list);
+    }
+
+//    @AuthVerify(roles = RoleEnum.TEACHER)
+    @GetMapping("/file/{paperId}")
+    public Object paperDataFile(@PathVariable("paperId") Long paperId, HttpServletResponse response) throws IOException {
+        analysisService.paperDataFile(paperId,response);
+        return null;
     }
 }
