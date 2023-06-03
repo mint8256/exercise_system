@@ -141,30 +141,34 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     @Override
     public MyPage<List<StudentVo>> getStuList(UserQuery userQuery) {
 
+        System.out.println(userQuery);
         MyPage<List<StudentVo>> myPage = new MyPage<>();
 
         List<StudentVo> voList;
         Long clazzId = userQuery.getClazzId();
 
         // 如果班级id不为空，可以直接调用查询班级学生的，然后再从里面进行筛选
-        if (clazzId != null) {
-
-            voList = SpringContextUtil.getBean(ClazzServiceImpl.class).getStudentListById(clazzId);
+        if (clazzId != null || userQuery.getClazzName() != null) {
+            if (clazzId != null){
+                voList = SpringContextUtil.getBean(ClazzServiceImpl.class).getStudentListById(clazzId);
+            }else{
+                voList = SpringContextUtil.getBean(ClazzServiceImpl.class).getStudentListByName(userQuery.getClazzName());
+            }
 
             voList = voList.stream()
                     // 用户编号
-                    .filter((vo) -> StrUtil.isNotBlank(userQuery.getUserIdentifier())
-                            && MyStrUtil.equal(userQuery.getUserIdentifier(), vo.getUserIdentifier()))
+                    .filter((vo) -> (userQuery.getUserIdentifier() == null ) || (StrUtil.isNotBlank(userQuery.getUserIdentifier())
+                            && MyStrUtil.equal(userQuery.getUserIdentifier(), vo.getUserIdentifier())))
                     // 用户名
-                    .filter((vo) -> StrUtil.isNotBlank(userQuery.getUsername())
-                            && MyStrUtil.equal(userQuery.getUsername(), vo.getUsername()))
+                    .filter((vo) -> (userQuery.getUsername() == null ) || (StrUtil.isNotBlank(userQuery.getUsername())
+                            && MyStrUtil.equal(userQuery.getUsername(), vo.getUsername())))
                     // 真实姓名
-                    .filter((vo) -> StrUtil.isNotBlank(userQuery.getRealName())
-                            && MyStrUtil.equal(userQuery.getRealName(), vo.getRealName()))
+                    .filter((vo) -> (userQuery.getRealName() == null ) || (StrUtil.isNotBlank(userQuery.getRealName())
+                            && MyStrUtil.equal(userQuery.getRealName(), vo.getRealName())))
                     // 性别
-                    .filter((vo) -> userQuery.getSex() != null
-                            && Objects.equals(vo.getSex(), userQuery.getSex())).collect(Collectors.toList());
-
+                    .filter((vo) -> (userQuery.getSex() == null ) || (userQuery.getSex() != null
+                            && Objects.equals(vo.getSex(), userQuery.getSex()))).collect(Collectors.toList());
+            System.out.println(voList);
             myPage.setTotal(voList.size());
             myPage.calTotalPage(voList.size(), userQuery.getSize());
 

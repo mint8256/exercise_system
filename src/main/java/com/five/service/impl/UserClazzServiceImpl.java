@@ -49,6 +49,7 @@ public class UserClazzServiceImpl extends ServiceImpl<UserClazzDao, UserClazz> i
         return userClazzDao.selectList(queryWrapper);
     }
 
+
     @Override
     public void deleteByUserId(Long userId) {
 
