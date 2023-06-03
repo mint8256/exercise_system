@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -80,6 +81,19 @@ public class ClazzServiceImpl extends ServiceImpl<ClazzDao, Clazz> implements Cl
         users = users.stream().filter((u) -> u.getRole().equals(RoleEnum.STUDENT.value())).collect(Collectors.toList());
 
         return users.stream().map(SpringContextUtil.getBean(UserServiceImpl.class)::userToVo).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StudentVo> getStudentListByName(String clazzName) {
+
+        LambdaQueryWrapper<Clazz> clazzLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        clazzLambdaQueryWrapper.eq(Clazz::getClazzName,clazzName);
+        // 先找到classId
+        Clazz clazz = clazzDao.selectOne(clazzLambdaQueryWrapper);
+        if (clazz == null){
+            return Collections.emptyList();
+        }
+        return getStudentListById(clazz.getClazzId());
     }
 
     @Override

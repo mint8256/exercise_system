@@ -20,5 +20,6 @@ public class UserQuery extends BaseQuery{
     private String userIdentifier;
     private Integer sex;
     private Long clazzId;
+    private String clazzName;
 
 }

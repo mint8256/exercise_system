@@ -36,6 +36,14 @@ public interface ClazzService extends IService<Clazz> {
     List<StudentVo> getStudentListById(Long clazzId);
 
     /**
+     * 根据clazzName查询班级学生
+     *
+     * @param clazzName 班级名称
+     * @return 查询到了学生列表
+     */
+    List<StudentVo> getStudentListByName(String clazzName);
+
+    /**
      * 查询一个班级的人数
      *
      * @param clazzId 班级人数
