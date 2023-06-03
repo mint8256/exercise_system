@@ -23,7 +23,7 @@ public interface QuestionListService extends IService<QuestionList> {
     /**
      * 获取这个老师的全部题目列表
      */
-    List<QuestionList> getAll();
+    List<QuestionList> getAll(Integer type);
 
     /**
      * 删除试题列表

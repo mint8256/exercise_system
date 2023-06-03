@@ -69,12 +69,15 @@ public class QuestionListServiceImpl extends ServiceImpl<QuestionListDao, Questi
     }
 
     @Override
-    public List<QuestionList> getAll() {
+    public List<QuestionList> getAll(Integer type) {
 
         Long userId = AuthUserContext.userId();
 
         LambdaQueryWrapper<QuestionList> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(QuestionList::getUserId, userId);
+        if (type != 0){
+            queryWrapper.eq(QuestionList::getType,type);
+        }
 
         return this.list(queryWrapper);
     }

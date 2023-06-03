@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.five.Bo.ExcelUser;
 import com.five.dao.ClazzDao;
 import com.five.dao.SchoolDao;
+import com.five.dao.UserClazzDao;
 import com.five.dao.UserDao;
 import com.five.entity.Clazz;
 import com.five.entity.School;
@@ -50,6 +51,10 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     private UserDao userDao;
     @Resource
     private SchoolDao schoolDao;
+
+    @Resource
+    private UserClazzDao userClazzDao;
+
     @Resource
     private ClazzDao clazzDao;
     @Resource
@@ -141,7 +146,6 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     @Override
     public MyPage<List<StudentVo>> getStuList(UserQuery userQuery) {
 
-        System.out.println(userQuery);
         MyPage<List<StudentVo>> myPage = new MyPage<>();
 
         List<StudentVo> voList;
@@ -179,16 +183,22 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
             return myPage;
         }
 
+        // 查找老师自己的班级学生
         Page<User> userPage = new Page<>();
         userPage.setSize(userQuery.getSize()).setCurrent(userQuery.getPage());
 
+        List<UserClazz> userClazzList = userClazzService.getListByUserId(AuthUserContext.userId());
+        List<Long> clazzIds = userClazzList.stream().map(UserClazz::getClazzId).collect(Collectors.toList());
+        LambdaQueryWrapper<UserClazz> userClazzLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        userClazzLambdaQueryWrapper.in(UserClazz::getClazzId,clazzIds);
+        List<Long> userIds = userClazzDao.selectList(userClazzLambdaQueryWrapper).stream().map(UserClazz::getUserId).collect(Collectors.toList());
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-
         queryWrapper.ne(User::getUserId, AuthUserContext.userId());
         queryWrapper.eq(StrUtil.isNotBlank(userQuery.getUserIdentifier()), User::getUserIdentifier, userQuery.getUserIdentifier());
         queryWrapper.eq(StrUtil.isNotBlank(userQuery.getUsername()), User::getUsername, userQuery.getUsername());
         queryWrapper.eq(StrUtil.isNotBlank(userQuery.getRealName()), User::getRealName, userQuery.getRealName());
         queryWrapper.eq(userQuery.getSex() != null, User::getSex, userQuery.getSex());
+        queryWrapper.in(User::getUserId,userIds);
 
         userPage = userDao.selectPage(userPage, queryWrapper);
 
@@ -208,11 +218,11 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     public StudentVo userToVo(User user) {
 
         StudentVo vo = mapperFacade.map(user, StudentVo.class);
-
+        System.out.println(user);
         UserClazz userClazz = userClazzService.getOneByUserId(user.getUserId());
 
         Clazz clazz = clazzDao.selectById(userClazz.getClazzId());
-
+        System.out.println(clazz);
         vo.setClazzName(clazz.getClazzName());
         vo.setGrade(clazz.getGrade());
         vo.setClassNumber(clazz.getClassNumber());
