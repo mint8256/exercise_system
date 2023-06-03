@@ -38,7 +38,7 @@ public class AnalysisController {
         return R.success(list);
     }
 
-//    @AuthVerify(roles = RoleEnum.TEACHER)
+    @AuthVerify(roles = RoleEnum.TEACHER)
     @GetMapping("/file/{paperId}")
     public Object paperDataFile(@PathVariable("paperId") Long paperId, HttpServletResponse response) throws IOException {
         analysisService.paperDataFile(paperId,response);
