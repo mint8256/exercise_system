@@ -6,7 +6,10 @@ import com.five.entity.Paper;
 import com.five.enums.RoleEnum;
 import com.five.exception.BaseException;
 import com.five.service.PaperService;
-import com.five.vo.*;
+import com.five.vo.PaperDetail;
+import com.five.vo.PaperVo;
+import com.five.vo.R;
+import com.five.vo.RCodeEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +30,7 @@ public class PaperController {
     private PaperService paperService;
 
     @Operation(summary = "根据试卷id获取试卷详情")
-    @AuthVerify(roles = {RoleEnum.TEACHER,RoleEnum.STUDENT})
+    @AuthVerify(roles = {RoleEnum.TEACHER, RoleEnum.STUDENT})
     @GetMapping("{paperId}")
     public R<PaperDetail> getSelf(@PathVariable("paperId") Long paperId) {
         Paper paper = paperService.getById(paperId);
@@ -101,7 +104,5 @@ public class PaperController {
 
         return R.success("修改成功");
     }
-
-
 
 }

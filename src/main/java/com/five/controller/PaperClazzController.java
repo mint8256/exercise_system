@@ -30,7 +30,7 @@ public class PaperClazzController {
     public R<List<PaperClazzVo>> getPaperClazzVOList(String paperName,String clazzName){
 
         List<PaperClazzVo> paperClazzVoList = paperClazzService.getPaperClazzVOList(paperName,clazzName);
-        return R.success();
+        return R.success(paperClazzVoList);
     }
 
 
