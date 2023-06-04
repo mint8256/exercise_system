@@ -82,7 +82,7 @@ public class PaperClazzServiceImpl extends ServiceImpl<PaperClazzDao, PaperClazz
 
         LambdaQueryWrapper<PaperClazz> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(StrUtil.isNotBlank(clazzName), PaperClazz::getClazzId, SpringContextUtil.getBean(ClazzServiceImpl.class).getClazzByName(clazzName).getClazzId());
-        queryWrapper.eq(StrUtil.isNotBlank(paperName), PaperClazz::getClazzId, SpringContextUtil.getBean(PaperServiceImpl.class).getByPaperName(paperName).getPaperId());
+        queryWrapper.eq(StrUtil.isNotBlank(paperName), PaperClazz::getPaperId, SpringContextUtil.getBean(PaperServiceImpl.class).getByPaperName(paperName).getPaperId());
 
         List<PaperClazz> list = this.list(queryWrapper);
 
