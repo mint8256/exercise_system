@@ -50,4 +50,5 @@ public class PaperVo {
     //关联的班级信息（有可能关联多个班级）
     List<Clazz> clazzList;
 
+
 }

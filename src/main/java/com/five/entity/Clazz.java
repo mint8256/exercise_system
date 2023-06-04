@@ -40,5 +40,12 @@ public class Clazz {
     private LocalDateTime signTime;
     //班级编号
     private String clazzIdentifier;
+
+    // 已提交人数
+    @TableField(exist = false)
+    private Integer committedNum;
+    // 总人数
+    @TableField(exist = false)
+    private Integer totalNum;
 }
 

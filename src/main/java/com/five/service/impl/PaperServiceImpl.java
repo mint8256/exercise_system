@@ -2,23 +2,25 @@ package com.five.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.five.dao.ClazzDao;
-import com.five.dao.PaperDao;
-import com.five.dao.QuestionListDao;
+import com.five.dao.*;
 import com.five.entity.*;
 import com.five.enums.PaperStatusEnum;
+import com.five.enums.RoleEnum;
+import com.five.enums.UserPaperStatusEnum;
 import com.five.service.*;
 import com.five.util.AuthUserContext;
 import com.five.util.IdentifierGenerator;
 import com.five.util.SpringContextUtil;
 import com.five.vo.PaperDetail;
 import com.five.vo.PaperVo;
+import com.five.vo.StudentVo;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -50,6 +52,8 @@ public class PaperServiceImpl extends ServiceImpl<PaperDao, Paper> implements Pa
     private QuestionListDao questionListDao;
     @Resource
     private QuestionService questionService;
+    @Resource
+    private UserDao userDao;
 
     @Override
     public List<PaperVo> getAllPaper() {
@@ -86,7 +90,31 @@ public class PaperServiceImpl extends ServiceImpl<PaperDao, Paper> implements Pa
 
         List<Long> clazzIds = paperClazzList.stream().map(PaperClazz::getClazzId).collect(Collectors.toList());
         List<Clazz> clazzList = clazzDao.selectBatchIds(clazzIds);
+        // 查询人数
+        for (Clazz clazz : clazzList) {
 
+            List<UserClazz> userClazzList = SpringContextUtil.getBean(UserClazzServiceImpl.class).getListByClazzId(clazz.getClazzId());
+
+            // 此时是包含，教师的
+            Set<Long> userIds = userClazzList.stream().map(UserClazz::getUserId).collect(Collectors.toSet());
+
+            List<User> users = userDao.selectBatchIds(userIds);
+            // 过滤掉老师
+            users = users.stream().filter((u) -> u.getRole().equals(RoleEnum.STUDENT.value())).collect(Collectors.toList());
+
+            clazz.setTotalNum(users.size());
+            if (users.isEmpty()){
+                continue;
+            }
+            List<UserPaper> userPaperList = userPaperService.getUserPaperList(paperId, users.stream().map(User::getUserId).collect(Collectors.toList()));
+            int num = 0;
+            for (UserPaper userPaper : userPaperList) {
+                if (UserPaperStatusEnum.COMPLETED.value().equals(userPaper.getStatus())){
+                    num++;
+                }
+            }
+            clazz.setCommittedNum(num);
+        }
         vo.setClazzList(clazzList);
 
         return vo;
