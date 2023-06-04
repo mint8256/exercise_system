@@ -154,6 +154,7 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
         LambdaQueryWrapper<UserPaper> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(UserPaper::getPaperId, paperId)
                 .in(UserPaper::getUserId, userIds)
+                .eq(userPaperQuery.getStatus() != null,UserPaper::getStatus,userPaperQuery.getStatus())
                 .ge(paper.getEndTime().isBefore(LocalDateTime.now()), UserPaper::getStatus, UserPaperStatusEnum.UNCORRECTED);
 
         page = userPaperDao.selectPage(page, queryWrapper);
