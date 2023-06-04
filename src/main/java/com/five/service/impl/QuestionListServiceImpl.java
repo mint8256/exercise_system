@@ -60,11 +60,14 @@ public class QuestionListServiceImpl extends ServiceImpl<QuestionListDao, Questi
         questionList.setQuestionListIdentifier(questionListIdentifier);
         questionListDao.insert(questionList);
         List<Question> questions = questionListGenerator.gen(questionList);
+        double totalScore = 0;
         for (Question question : questions) {
             question.setQuestionListId(questionList.getQuestionListId().longValue());
 //            questionDao.insert(question);
+            totalScore += question.getScore();
         }
-        System.out.println(questions);
+        questionList.setScore(totalScore);
+        questionListDao.updateById(questionList);
         questionDao.insertBatch(questions);
     }
 
