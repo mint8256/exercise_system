@@ -34,5 +34,7 @@ public interface QuestionListService extends IService<QuestionList> {
      * 获取下一个题目列表序号
      */
     Integer getNextQuestionListNumber();
+
+    QuestionList detail(Long questionListId);
 }
 

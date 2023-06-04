@@ -51,7 +51,7 @@ public class QuestionListController {
     @GetMapping("/{questionListId}")
     @AuthVerify(roles = RoleEnum.TEACHER)
     public R<QuestionList> getQuestionListDetail(@PathVariable("questionListId")Long questionListId){
-        QuestionList byId = questionListService.getById(questionListId);
+        QuestionList byId = questionListService.detail(questionListId);
         return R.success(byId);
     }
 }

@@ -75,8 +75,8 @@ public class QuestionListServiceImpl extends ServiceImpl<QuestionListDao, Questi
 
         LambdaQueryWrapper<QuestionList> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(QuestionList::getUserId, userId);
-        if (type != 0){
-            queryWrapper.eq(QuestionList::getType,type);
+        if (type != 0) {
+            queryWrapper.eq(QuestionList::getType, type);
         }
 
         return this.list(queryWrapper);
@@ -106,6 +106,18 @@ public class QuestionListServiceImpl extends ServiceImpl<QuestionListDao, Questi
 
         List<QuestionList> list = this.list(queryWrapper);
         return list.size() + 1;
+    }
+
+    @Override
+    public QuestionList detail(Long questionListId) {
+
+
+        QuestionList questionList = this.getById(questionListId);
+
+        List<Question> questions = SpringContextUtil.getBean(QuestionServiceImpl.class).getByQuestionListId(questionListId);
+        questionList.setQuestionList(questions);
+
+        return questionList;
     }
 }
 

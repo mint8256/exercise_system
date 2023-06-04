@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * (QuestionList)表实体类
@@ -22,7 +23,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class QuestionList{
+public class QuestionList {
 
     @TableId(type = IdType.AUTO)
     private Integer questionListId;
@@ -54,5 +55,9 @@ public class QuestionList{
     private int type;
     //创建人
     private Long userId;
+
+    //全部的题目
+    @TableField(exist = false)
+    private List<Question> questionList;
 }
 
