@@ -159,6 +159,12 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
         page = userPaperDao.selectPage(page, queryWrapper);
 
         List<UserPaper> records = page.getRecords();
+        for (UserPaper record : records) {
+            User byId = userService.getById(record.getUserId());
+            record.setUsername(byId.getUsername());
+            record.setSex(byId.getSex());
+            record.setRealName(byId.getRealName());
+        }
         long total = page.getTotal();
         myPage.setData(records);
         myPage.setTotal((int) total);
