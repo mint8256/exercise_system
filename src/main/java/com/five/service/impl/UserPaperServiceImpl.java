@@ -233,7 +233,8 @@ public class UserPaperServiceImpl extends ServiceImpl<UserPaperDao, UserPaper> i
             return userPaper.getDuration().intValue();
         }
         Duration duration = Duration.between(LocalDateTime.now(),userPaper.getStartTime());
-        return (int) duration.toSeconds();
+
+        return Math.toIntExact(userPaper.getDuration() - duration.toSeconds());
     }
 
     @Override
