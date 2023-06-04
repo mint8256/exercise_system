@@ -76,7 +76,7 @@ public class PaperController {
         Paper paper = paperService.getById(paperVo.getPaperId());
 
         //校验试卷名称是否唯一
-        if (StrUtil.isNotBlank(paperVo.getPaperName()) || !paper.getPaperName().equals(paperVo.getPaperName())) {
+        if (StrUtil.isNotBlank(paperVo.getPaperName()) && !paper.getPaperName().equals(paperVo.getPaperName())) {
             String paperName = paperVo.getPaperName();
             if (paperService.paperNameIsExist(paperName)) {
                 throw new BaseException(RCodeEnum.PAPER_NAME_IS_EXIST);

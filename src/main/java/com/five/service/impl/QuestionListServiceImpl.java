@@ -46,9 +46,7 @@ public class QuestionListServiceImpl extends ServiceImpl<QuestionListDao, Questi
     @Override
     @Transactional
     public void genQuestionList(QuestionList questionList) {
-
         //  根据题目列表属性生成需要的题目list
-
         Long userId = AuthUserContext.userId();
         Long schoolId = userService.getSchoolByUserId(userId).getSchoolId();
 
@@ -63,7 +61,6 @@ public class QuestionListServiceImpl extends ServiceImpl<QuestionListDao, Questi
         double totalScore = 0;
         for (Question question : questions) {
             question.setQuestionListId(questionList.getQuestionListId().longValue());
-//            questionDao.insert(question);
             totalScore += question.getScore();
         }
         questionList.setScore(totalScore);
