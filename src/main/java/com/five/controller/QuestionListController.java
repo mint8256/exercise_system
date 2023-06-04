@@ -48,4 +48,10 @@ public class QuestionListController {
         return R.success("删除成功");
     }
 
+    @GetMapping("/{questionListId}")
+    @AuthVerify(roles = RoleEnum.TEACHER)
+    public R<QuestionList> getQuestionListDetail(@PathVariable("questionListId")Long questionListId){
+        QuestionList byId = questionListService.getById(questionListId);
+        return R.success(byId);
+    }
 }
