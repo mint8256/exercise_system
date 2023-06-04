@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -136,10 +135,10 @@ public class PaperServiceImpl extends ServiceImpl<PaperDao, Paper> implements Pa
         paper.setPaperScore(questionList.getScore());
         paper.setQuestionCount(questionList.getQuestionCount());
 
-        //计算并设置持续时间，单位：s
-        Duration between = Duration.between(paperVo.getStartTime(), paperVo.getEndTime());
-        long seconds = between.toSeconds();
-        paper.setDuration(seconds);
+        //计算并设置持续时间，单位：s,现在不需要自己传了。
+//        Duration between = Duration.between(paperVo.getStartTime(), paperVo.getEndTime());
+//        long seconds = between.toSeconds();
+//        paper.setDuration(seconds);
 
         paper.setPaperIdentifier(IdentifierGenerator.genPaperIdentifier(paperVo.getPaperDifficulty(), schoolId,
                 questionList.getQuestionListNumber(), nextPaperNumber(questionListId)));
@@ -157,7 +156,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperDao, Paper> implements Pa
     public void updateStatus(Long paperId) {
 
         Paper paper = paperDao.selectById(paperId);
-        if (PaperStatusEnum.RELEASED.value().equals(paper.getStatus())){
+        if (PaperStatusEnum.RELEASED.value().equals(paper.getStatus())) {
             return;
         }
         // 1. 更改试卷本身的状态
