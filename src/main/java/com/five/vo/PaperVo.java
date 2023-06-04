@@ -1,7 +1,5 @@
 package com.five.vo;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.five.entity.Clazz;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,7 +32,7 @@ public class PaperVo {
     //题目数量
     private Integer questionCount;
     //试卷总分
-    private Double score;
+    private Double paperScore;
     //试卷编号
     private String paperIdentifier;
     //试卷难度
