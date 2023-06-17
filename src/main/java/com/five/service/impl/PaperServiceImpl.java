@@ -150,7 +150,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperDao, Paper> implements Pa
 
     @Override
     @Transactional
-    public void savePaper(PaperVo paperVo) {
+    public Long savePaper(PaperVo paperVo) {
 
         Long questionListId = paperVo.getQuestionListId();
         QuestionList questionList = questionListDao.selectById(questionListId);
@@ -176,7 +176,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperDao, Paper> implements Pa
         // 2. 添加试卷班级关联信息
         List<Long> clazzIds = paperVo.getClazzList().stream().map(Clazz::getClazzId).collect(Collectors.toList());
         paperClazzService.insertBatch(paper.getPaperId(), clazzIds);
-
+        return paper.getPaperId();
     }
 
     @Override

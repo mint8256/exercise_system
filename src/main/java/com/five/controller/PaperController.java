@@ -91,7 +91,7 @@ public class PaperController {
     @Operation(summary = "添加试卷信息")
     @AuthVerify(roles = RoleEnum.TEACHER)
     @PostMapping("save")
-    public R<Void> savePaper(@RequestBody PaperVo paperVo) {
+    public R<Long> savePaper(@RequestBody PaperVo paperVo) {
 
         //校验试卷名称是否唯一
         String paperName = paperVo.getPaperName();
@@ -100,9 +100,7 @@ public class PaperController {
             throw new BaseException(RCodeEnum.PAPER_NAME_IS_EXIST);
         }
 
-        paperService.savePaper(paperVo);
-
-        return R.success("修改成功");
+        return R.success("修改成功",paperService.savePaper(paperVo));
     }
 
 }

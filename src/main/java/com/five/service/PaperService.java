@@ -41,7 +41,7 @@ public interface PaperService extends IService<Paper> {
      *
      * @param paperVo 试卷信息（包括关联的班级）
      */
-    void savePaper(PaperVo paperVo);
+    Long savePaper(PaperVo paperVo);
 
     /**
      * 更改试卷的状态，由未发布转换为发布
